@@ -12,7 +12,7 @@ export default function ContactPage() {
       <Navbar />
       <main>
         {/* Contact Hero Section */}
-        <section className="bg-gradient-to-r from-primary-600 to-blue-700 dark:from-primary-800 dark:to-blue-900 py-16 md:py-24">
+        <section className="bg-gradient-to-r from-gray-800 to-blue-900 dark:from-primary-800 dark:to-blue-900 py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div 
               className="text-center text-white"

@@ -29,7 +29,7 @@ export default function Hero() {
   };
   
   return (
-    <section id="home" className="relative overflow-hidden bg-gradient-to-r from-primary-600 to-blue-700 dark:from-primary-800 dark:to-blue-900 animate-[gradient_8s_ease_infinite] bg-[length:400%_400%]">
+    <section id="home" className="relative overflow-hidden bg-gradient-to-r from-gray-800 to-blue-900 dark:from-primary-800 dark:to-blue-900 animate-[gradient_8s_ease_infinite] bg-[length:400%_400%]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div 

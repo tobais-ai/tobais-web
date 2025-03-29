@@ -253,7 +253,7 @@ export default function AuthPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="bg-gradient-to-r from-primary-600 to-blue-700 dark:from-primary-800 dark:to-blue-900 rounded-xl p-8 text-white h-full flex flex-col justify-center">
+              <div className="bg-gradient-to-r from-gray-800 to-blue-900 dark:from-primary-800 dark:to-blue-900 rounded-xl p-8 text-white h-full flex flex-col justify-center">
                 <div className="max-w-lg">
                   <h2 className="text-3xl font-bold font-['Poppins'] mb-6">{t("auth.heroTitle")}</h2>
                   <p className="text-xl opacity-90 mb-8">{t("auth.heroSubtitle")}</p>
