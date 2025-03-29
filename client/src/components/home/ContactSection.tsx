@@ -11,26 +11,36 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaCalendarCheck } from "react-icons/fa";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { ServiceType } from "@shared/schema";
 
 // Contact form schema
 const contactSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email({ message: "Valid email is required" }),
+  serviceId: z.string().optional(),
   message: z.string().min(1, { message: "Message is required" })
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Fetch services for the dropdown
+  const { data: services } = useQuery<ServiceType[]>({
+    queryKey: ["/api/services"],
+  });
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",
       email: "",
+      serviceId: undefined,
       message: ""
     }
   });
@@ -104,6 +114,34 @@ export default function ContactSection() {
                       <FormControl>
                         <Input type="email" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="serviceId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("contact.form.serviceType")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={t("contact.form.selectService")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {services?.map((service) => (
+                            <SelectItem key={service.id} value={String(service.id)}>
+                              {language === 'es' && service.nameEs ? service.nameEs : service.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}

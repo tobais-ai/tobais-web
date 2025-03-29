@@ -29,6 +29,7 @@ export const contactSubmissions = pgTable("contact_submissions", {
   name: text("name").notNull(),
   email: text("email").notNull(),
   message: text("message").notNull(),
+  serviceId: integer("service_id").references(() => serviceTypes.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   resolved: boolean("resolved").default(false),
 });
@@ -37,6 +38,7 @@ export const insertContactSchema = createInsertSchema(contactSubmissions).pick({
   name: true,
   email: true,
   message: true,
+  serviceId: true,
 });
 
 // Blog Posts Table

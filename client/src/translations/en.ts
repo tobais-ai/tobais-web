@@ -95,6 +95,8 @@ export const enTranslations = {
     form: {
       name: "Name",
       email: "Email",
+      serviceType: "Type of Service",
+      selectService: "Select a service",
       message: "Message",
       submit: "Submit",
       errors: {
