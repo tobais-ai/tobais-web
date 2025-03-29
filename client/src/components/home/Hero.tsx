@@ -33,20 +33,20 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div 
-            className="text-white space-y-6"
+            className="text-primary-foreground space-y-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             <motion.h1 
-              className="text-4xl md:text-5xl font-bold font-['Poppins']"
+              className="text-4xl md:text-5xl font-bold font-['Poppins'] text-primary-foreground"
               variants={itemVariants}
             >
               {t("hero.title")}
             </motion.h1>
             
             <motion.p 
-              className="text-lg md:text-xl opacity-90"
+              className="text-lg md:text-xl opacity-90 text-primary-foreground"
               variants={itemVariants}
             >
               {t("hero.subtitle")}
@@ -63,7 +63,7 @@ export default function Hero() {
               </Link>
               
               <Link href="/contact">
-                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-5 py-3 transition-all duration-200">
+                <Button variant="outline" className="border-2 border-white text-primary-foreground hover:bg-white/10 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-5 py-3 transition-all duration-200">
                   <i className="fas fa-calendar-check mr-2"></i> {t("hero.cta2")}
                 </Button>
               </Link>
