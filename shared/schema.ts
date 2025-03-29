@@ -1,6 +1,7 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, doublePrecision, foreignKey, date } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { relations } from "drizzle-orm";
 
 // Users Table
 export const users = pgTable("users", {
@@ -102,7 +103,7 @@ export const testimonials = pgTable("testimonials", {
   company: text("company"),
   content: text("content").notNull(),
   contentEs: text("content_es"),
-  rating: doublePrecision("rating").default(5.0),
+  rating: integer("rating").default(5),
   image: text("image"),
   approved: boolean("approved").default(false),
 });
@@ -192,3 +193,206 @@ export type SocialMedia = typeof socialMediaContent.$inferSelect;
 
 export type InsertServiceType = z.infer<typeof insertServiceTypeSchema>;
 export type ServiceType = typeof serviceTypes.$inferSelect;
+
+// Orders Table
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  status: text("status").default("pending").notNull(),
+  total: integer("total").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  stripePaymentId: text("stripe_payment_id"),
+  stripeCustomerId: text("stripe_customer_id"),
+  notes: text("notes"),
+  shippingAddress: jsonb("shipping_address"),
+  paymentMethod: text("payment_method").default("stripe"),
+  discountCode: text("discount_code"),
+  discountAmount: integer("discount_amount").default(0),
+});
+
+export const insertOrderSchema = createInsertSchema(orders).pick({
+  userId: true,
+  status: true,
+  total: true,
+  stripePaymentId: true,
+  stripeCustomerId: true,
+  notes: true,
+  shippingAddress: true,
+  paymentMethod: true,
+  discountCode: true,
+  discountAmount: true,
+});
+
+// Order Items Table
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").references(() => orders.id).notNull(),
+  serviceId: integer("service_id").references(() => serviceTypes.id).notNull(),
+  quantity: integer("quantity").default(1).notNull(),
+  price: integer("price").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+});
+
+export const insertOrderItemSchema = createInsertSchema(orderItems).pick({
+  orderId: true,
+  serviceId: true,
+  quantity: true,
+  price: true,
+  name: true,
+  description: true,
+});
+
+// Project Milestones Table
+export const projectMilestones = pgTable("project_milestones", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id).notNull(),
+  title: text("title").notNull(),
+  titleEs: text("title_es"),
+  description: text("description"),
+  descriptionEs: text("description_es"),
+  dueDate: timestamp("due_date"),
+  completedAt: timestamp("completed_at"),
+  status: text("status").default("pending").notNull(),
+  sortOrder: integer("sort_order").default(0),
+});
+
+export const insertProjectMilestoneSchema = createInsertSchema(projectMilestones).pick({
+  projectId: true,
+  title: true,
+  titleEs: true,
+  description: true,
+  descriptionEs: true,
+  dueDate: true,
+  completedAt: true,
+  status: true,
+  sortOrder: true,
+});
+
+// Project Updates Table
+export const projectUpdates = pgTable("project_updates", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id).notNull(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  contentEs: text("content_es"),
+  attachments: jsonb("attachments"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  isPublic: boolean("is_public").default(true),
+});
+
+export const insertProjectUpdateSchema = createInsertSchema(projectUpdates).pick({
+  projectId: true,
+  userId: true,
+  content: true,
+  contentEs: true,
+  attachments: true,
+  isPublic: true,
+});
+
+// Project Comments Table
+export const projectComments = pgTable("project_comments", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id).notNull(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  attachments: jsonb("attachments"),
+});
+
+export const insertProjectCommentSchema = createInsertSchema(projectComments).pick({
+  projectId: true,
+  userId: true,
+  content: true,
+  attachments: true,
+});
+
+// Define relations
+export const usersRelations = relations(users, ({ many }) => ({
+  projects: many(projects),
+  orders: many(orders),
+  projectComments: many(projectComments),
+  projectUpdates: many(projectUpdates),
+  socialMediaContent: many(socialMediaContent),
+}));
+
+export const projectsRelations = relations(projects, ({ one, many }) => ({
+  client: one(users, {
+    fields: [projects.clientId],
+    references: [users.id],
+  }),
+  milestones: many(projectMilestones),
+  updates: many(projectUpdates),
+  comments: many(projectComments),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId],
+    references: [users.id],
+  }),
+  items: many(orderItems),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+  }),
+  service: one(serviceTypes, {
+    fields: [orderItems.serviceId],
+    references: [serviceTypes.id],
+  }),
+}));
+
+export const projectMilestonesRelations = relations(projectMilestones, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectMilestones.projectId],
+    references: [projects.id],
+  }),
+}));
+
+export const projectUpdatesRelations = relations(projectUpdates, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectUpdates.projectId],
+    references: [projects.id],
+  }),
+  user: one(users, {
+    fields: [projectUpdates.userId],
+    references: [users.id],
+  }),
+}));
+
+export const projectCommentsRelations = relations(projectComments, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectComments.projectId],
+    references: [projects.id],
+  }),
+  user: one(users, {
+    fields: [projectComments.userId],
+    references: [users.id],
+  }),
+}));
+
+export const socialMediaContentRelations = relations(socialMediaContent, ({ one }) => ({
+  user: one(users, {
+    fields: [socialMediaContent.userId],
+    references: [users.id],
+  }),
+}));
+
+export type InsertOrder = z.infer<typeof insertOrderSchema>;
+export type Order = typeof orders.$inferSelect;
+
+export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
+export type OrderItem = typeof orderItems.$inferSelect;
+
+export type InsertProjectMilestone = z.infer<typeof insertProjectMilestoneSchema>;
+export type ProjectMilestone = typeof projectMilestones.$inferSelect;
+
+export type InsertProjectUpdate = z.infer<typeof insertProjectUpdateSchema>;
+export type ProjectUpdate = typeof projectUpdates.$inferSelect;
+
+export type InsertProjectComment = z.infer<typeof insertProjectCommentSchema>;
+export type ProjectComment = typeof projectComments.$inferSelect;

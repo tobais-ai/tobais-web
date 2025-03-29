@@ -6,6 +6,11 @@ import {
   testimonials, 
   socialMediaContent, 
   serviceTypes,
+  orders,
+  orderItems,
+  projectMilestones,
+  projectUpdates,
+  projectComments,
   type User, 
   type InsertUser,
   type ContactSubmission, 
@@ -19,7 +24,17 @@ import {
   type SocialMedia, 
   type InsertSocialMedia, 
   type ServiceType, 
-  type InsertServiceType 
+  type InsertServiceType,
+  type Order,
+  type InsertOrder,
+  type OrderItem,
+  type InsertOrderItem,
+  type ProjectMilestone,
+  type InsertProjectMilestone,
+  type ProjectUpdate,
+  type InsertProjectUpdate,
+  type ProjectComment,
+  type InsertProjectComment
 } from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
@@ -63,6 +78,41 @@ export interface IStorage {
   updateProject(id: number, data: Partial<Project>): Promise<Project | undefined>;
   deleteProject(id: number): Promise<boolean>;
   
+  // Project Milestones
+  createProjectMilestone(milestone: InsertProjectMilestone): Promise<ProjectMilestone>;
+  getProjectMilestones(projectId: number): Promise<ProjectMilestone[]>;
+  getProjectMilestone(id: number): Promise<ProjectMilestone | undefined>;
+  updateProjectMilestone(id: number, data: Partial<ProjectMilestone>): Promise<ProjectMilestone | undefined>;
+  deleteProjectMilestone(id: number): Promise<boolean>;
+  
+  // Project Updates
+  createProjectUpdate(update: InsertProjectUpdate): Promise<ProjectUpdate>;
+  getProjectUpdates(projectId: number, publicOnly?: boolean): Promise<ProjectUpdate[]>;
+  getProjectUpdate(id: number): Promise<ProjectUpdate | undefined>;
+  updateProjectUpdate(id: number, data: Partial<ProjectUpdate>): Promise<ProjectUpdate | undefined>;
+  deleteProjectUpdate(id: number): Promise<boolean>;
+  
+  // Project Comments
+  createProjectComment(comment: InsertProjectComment): Promise<ProjectComment>;
+  getProjectComments(projectId: number): Promise<ProjectComment[]>;
+  getProjectComment(id: number): Promise<ProjectComment | undefined>;
+  updateProjectComment(id: number, data: Partial<ProjectComment>): Promise<ProjectComment | undefined>;
+  deleteProjectComment(id: number): Promise<boolean>;
+  
+  // Orders
+  createOrder(order: InsertOrder): Promise<Order>;
+  getOrders(userId?: number, status?: string): Promise<Order[]>;
+  getOrder(id: number): Promise<Order | undefined>;
+  updateOrder(id: number, data: Partial<Order>): Promise<Order | undefined>;
+  updateStripeInfo(userId: number, stripeCustomerId: string, orderId: number, stripePaymentId: string): Promise<Order | undefined>;
+  
+  // Order Items
+  createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+  getOrderItems(orderId: number): Promise<OrderItem[]>;
+  getOrderItem(id: number): Promise<OrderItem | undefined>;
+  updateOrderItem(id: number, data: Partial<OrderItem>): Promise<OrderItem | undefined>;
+  deleteOrderItem(id: number): Promise<boolean>;
+  
   // Testimonials
   createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
   getTestimonials(approved?: boolean): Promise<Testimonial[]>;
@@ -97,6 +147,11 @@ export class MemStorage implements IStorage {
   private testimonials: Map<number, Testimonial>;
   private socialMediaContents: Map<number, SocialMedia>;
   private serviceTypes: Map<number, ServiceType>;
+  private orders: Map<number, Order>;
+  private orderItems: Map<number, OrderItem>;
+  private projectMilestones: Map<number, ProjectMilestone>;
+  private projectUpdates: Map<number, ProjectUpdate>;
+  private projectComments: Map<number, ProjectComment>;
   
   currentUserId: number;
   currentContactId: number;
@@ -105,6 +160,11 @@ export class MemStorage implements IStorage {
   currentTestimonialId: number;
   currentSocialMediaId: number;
   currentServiceTypeId: number;
+  currentOrderId: number;
+  currentOrderItemId: number;
+  currentProjectMilestoneId: number;
+  currentProjectUpdateId: number;
+  currentProjectCommentId: number;
   
   sessionStore: SessionStore;
 
@@ -116,6 +176,11 @@ export class MemStorage implements IStorage {
     this.testimonials = new Map();
     this.socialMediaContents = new Map();
     this.serviceTypes = new Map();
+    this.orders = new Map();
+    this.orderItems = new Map();
+    this.projectMilestones = new Map();
+    this.projectUpdates = new Map();
+    this.projectComments = new Map();
     
     this.currentUserId = 1;
     this.currentContactId = 1;
@@ -124,6 +189,11 @@ export class MemStorage implements IStorage {
     this.currentTestimonialId = 1;
     this.currentSocialMediaId = 1;
     this.currentServiceTypeId = 1;
+    this.currentOrderId = 1;
+    this.currentOrderItemId = 1;
+    this.currentProjectMilestoneId = 1;
+    this.currentProjectUpdateId = 1;
+    this.currentProjectCommentId = 1;
     
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
@@ -465,7 +535,7 @@ export class MemStorage implements IStorage {
       image: image ?? null,
       position: position ?? null,
       company: company ?? null,
-      rating: rating ?? null,
+      rating: rating ?? 5,
       approved: approved ?? false
     };
     this.testimonials.set(id, testimonialData);
@@ -591,6 +661,247 @@ export class MemStorage implements IStorage {
   
   async deleteServiceType(id: number): Promise<boolean> {
     return this.serviceTypes.delete(id);
+  }
+  
+  // Project Milestones
+  async createProjectMilestone(milestone: InsertProjectMilestone): Promise<ProjectMilestone> {
+    const id = this.currentProjectMilestoneId++;
+    const { titleEs, description, descriptionEs, dueDate, completedAt, status, sortOrder, ...otherProps } = milestone;
+    
+    const milestoneData: ProjectMilestone = {
+      ...otherProps,
+      id,
+      titleEs: titleEs ?? null,
+      description: description ?? null,
+      descriptionEs: descriptionEs ?? null,
+      dueDate: dueDate ?? null,
+      completedAt: completedAt ?? null,
+      status: status ?? "pending",
+      sortOrder: sortOrder ?? 0
+    };
+    
+    this.projectMilestones.set(id, milestoneData);
+    return milestoneData;
+  }
+  
+  async getProjectMilestones(projectId: number): Promise<ProjectMilestone[]> {
+    return Array.from(this.projectMilestones.values())
+      .filter(milestone => milestone.projectId === projectId)
+      .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  }
+  
+  async getProjectMilestone(id: number): Promise<ProjectMilestone | undefined> {
+    return this.projectMilestones.get(id);
+  }
+  
+  async updateProjectMilestone(id: number, data: Partial<ProjectMilestone>): Promise<ProjectMilestone | undefined> {
+    const milestone = await this.getProjectMilestone(id);
+    if (!milestone) return undefined;
+    
+    const updatedMilestone = { ...milestone, ...data };
+    this.projectMilestones.set(id, updatedMilestone);
+    return updatedMilestone;
+  }
+  
+  async deleteProjectMilestone(id: number): Promise<boolean> {
+    return this.projectMilestones.delete(id);
+  }
+  
+  // Project Updates
+  async createProjectUpdate(update: InsertProjectUpdate): Promise<ProjectUpdate> {
+    const id = this.currentProjectUpdateId++;
+    const now = new Date();
+    
+    const { contentEs, attachments, isPublic, ...otherProps } = update;
+    
+    const updateData: ProjectUpdate = {
+      ...otherProps,
+      id,
+      contentEs: contentEs ?? null,
+      attachments: attachments ?? null,
+      isPublic: isPublic ?? true,
+      createdAt: now
+    };
+    
+    this.projectUpdates.set(id, updateData);
+    return updateData;
+  }
+  
+  async getProjectUpdates(projectId: number, publicOnly?: boolean): Promise<ProjectUpdate[]> {
+    let updates = Array.from(this.projectUpdates.values())
+      .filter(update => update.projectId === projectId);
+    
+    if (publicOnly) {
+      updates = updates.filter(update => update.isPublic);
+    }
+    
+    return updates.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+  
+  async getProjectUpdate(id: number): Promise<ProjectUpdate | undefined> {
+    return this.projectUpdates.get(id);
+  }
+  
+  async updateProjectUpdate(id: number, data: Partial<ProjectUpdate>): Promise<ProjectUpdate | undefined> {
+    const update = await this.getProjectUpdate(id);
+    if (!update) return undefined;
+    
+    const updatedUpdate = { ...update, ...data };
+    this.projectUpdates.set(id, updatedUpdate);
+    return updatedUpdate;
+  }
+  
+  async deleteProjectUpdate(id: number): Promise<boolean> {
+    return this.projectUpdates.delete(id);
+  }
+  
+  // Project Comments
+  async createProjectComment(comment: InsertProjectComment): Promise<ProjectComment> {
+    const id = this.currentProjectCommentId++;
+    const now = new Date();
+    
+    const { attachments, ...otherProps } = comment;
+    
+    const commentData: ProjectComment = {
+      ...otherProps,
+      id,
+      attachments: attachments ?? null,
+      createdAt: now
+    };
+    
+    this.projectComments.set(id, commentData);
+    return commentData;
+  }
+  
+  async getProjectComments(projectId: number): Promise<ProjectComment[]> {
+    return Array.from(this.projectComments.values())
+      .filter(comment => comment.projectId === projectId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  }
+  
+  async getProjectComment(id: number): Promise<ProjectComment | undefined> {
+    return this.projectComments.get(id);
+  }
+  
+  async updateProjectComment(id: number, data: Partial<ProjectComment>): Promise<ProjectComment | undefined> {
+    const comment = await this.getProjectComment(id);
+    if (!comment) return undefined;
+    
+    const updatedComment = { ...comment, ...data };
+    this.projectComments.set(id, updatedComment);
+    return updatedComment;
+  }
+  
+  async deleteProjectComment(id: number): Promise<boolean> {
+    return this.projectComments.delete(id);
+  }
+  
+  // Orders
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const id = this.currentOrderId++;
+    const now = new Date();
+    
+    const { status, stripePaymentId, stripeCustomerId, notes, shippingAddress, paymentMethod, discountCode, discountAmount, ...otherProps } = order;
+    
+    const orderData: Order = {
+      ...otherProps,
+      id,
+      status: status ?? "pending",
+      createdAt: now,
+      updatedAt: now,
+      stripePaymentId: stripePaymentId ?? null,
+      stripeCustomerId: stripeCustomerId ?? null,
+      notes: notes ?? null,
+      shippingAddress: shippingAddress ?? null,
+      paymentMethod: paymentMethod ?? "stripe",
+      discountCode: discountCode ?? null,
+      discountAmount: discountAmount ?? 0
+    };
+    
+    this.orders.set(id, orderData);
+    return orderData;
+  }
+  
+  async getOrders(userId?: number, status?: string): Promise<Order[]> {
+    let orders = Array.from(this.orders.values());
+    
+    if (userId !== undefined) {
+      orders = orders.filter(order => order.userId === userId);
+    }
+    
+    if (status !== undefined) {
+      orders = orders.filter(order => order.status === status);
+    }
+    
+    return orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+  
+  async getOrder(id: number): Promise<Order | undefined> {
+    return this.orders.get(id);
+  }
+  
+  async updateOrder(id: number, data: Partial<Order>): Promise<Order | undefined> {
+    const order = await this.getOrder(id);
+    if (!order) return undefined;
+    
+    const updatedOrder = { ...order, ...data, updatedAt: new Date() };
+    this.orders.set(id, updatedOrder);
+    return updatedOrder;
+  }
+  
+  async updateStripeInfo(userId: number, stripeCustomerId: string, orderId: number, stripePaymentId: string): Promise<Order | undefined> {
+    const order = await this.getOrder(orderId);
+    if (!order) return undefined;
+    
+    const updatedOrder = { 
+      ...order, 
+      stripeCustomerId, 
+      stripePaymentId,
+      status: "paid",
+      updatedAt: new Date() 
+    };
+    
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+  
+  // Order Items
+  async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
+    const id = this.currentOrderItemId++;
+    
+    const { quantity, description, ...otherProps } = item;
+    
+    const itemData: OrderItem = {
+      ...otherProps,
+      id,
+      quantity: quantity ?? 1,
+      description: description ?? null
+    };
+    
+    this.orderItems.set(id, itemData);
+    return itemData;
+  }
+  
+  async getOrderItems(orderId: number): Promise<OrderItem[]> {
+    return Array.from(this.orderItems.values())
+      .filter(item => item.orderId === orderId);
+  }
+  
+  async getOrderItem(id: number): Promise<OrderItem | undefined> {
+    return this.orderItems.get(id);
+  }
+  
+  async updateOrderItem(id: number, data: Partial<OrderItem>): Promise<OrderItem | undefined> {
+    const item = await this.getOrderItem(id);
+    if (!item) return undefined;
+    
+    const updatedItem = { ...item, ...data };
+    this.orderItems.set(id, updatedItem);
+    return updatedItem;
+  }
+  
+  async deleteOrderItem(id: number): Promise<boolean> {
+    return this.orderItems.delete(id);
   }
 }
 
@@ -958,6 +1269,9 @@ export class PostgresStorage implements IStorage {
       ...otherProps 
     } = testimonial;
     
+    // Make sure rating is an integer
+    const ratingInt = rating ? Math.round(Number(rating)) : 5;
+    
     // Ensure all nullable fields are explicitly set to null if not provided
     const data = {
       ...otherProps,
@@ -965,7 +1279,7 @@ export class PostgresStorage implements IStorage {
       image: image ?? null,
       position: position ?? null,
       company: company ?? null,
-      rating: rating ?? null,
+      rating: ratingInt, // Use the integer version
       approved: approved ?? false
     };
     
@@ -1109,6 +1423,358 @@ export class PostgresStorage implements IStorage {
   async deleteServiceType(id: number): Promise<boolean> {
     const result = await this.db.delete(serviceTypes).where(eq(serviceTypes.id, id));
     return result.count > 0;
+  }
+  
+  // Project Milestones
+  async createProjectMilestone(milestone: InsertProjectMilestone): Promise<ProjectMilestone> {
+    try {
+      const [result] = await this.db.insert(projectMilestones).values(milestone).returning();
+      return result;
+    } catch (error) {
+      console.error("Error creating project milestone:", error);
+      throw error;
+    }
+  }
+  
+  async getProjectMilestones(projectId: number): Promise<ProjectMilestone[]> {
+    try {
+      return await this.db
+        .select()
+        .from(projectMilestones)
+        .where(eq(projectMilestones.projectId, projectId))
+        .orderBy(asc(projectMilestones.sortOrder));
+    } catch (error) {
+      console.error("Error getting project milestones:", error);
+      return [];
+    }
+  }
+  
+  async getProjectMilestone(id: number): Promise<ProjectMilestone | undefined> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(projectMilestones)
+        .where(eq(projectMilestones.id, id));
+      return result;
+    } catch (error) {
+      console.error("Error getting project milestone:", error);
+      return undefined;
+    }
+  }
+  
+  async updateProjectMilestone(id: number, data: Partial<ProjectMilestone>): Promise<ProjectMilestone | undefined> {
+    try {
+      const [result] = await this.db
+        .update(projectMilestones)
+        .set(data)
+        .where(eq(projectMilestones.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating project milestone:", error);
+      return undefined;
+    }
+  }
+  
+  async deleteProjectMilestone(id: number): Promise<boolean> {
+    try {
+      const result = await this.db
+        .delete(projectMilestones)
+        .where(eq(projectMilestones.id, id));
+      return result.count > 0;
+    } catch (error) {
+      console.error("Error deleting project milestone:", error);
+      return false;
+    }
+  }
+  
+  // Project Updates
+  async createProjectUpdate(update: InsertProjectUpdate): Promise<ProjectUpdate> {
+    try {
+      const [result] = await this.db.insert(projectUpdates).values(update).returning();
+      return result;
+    } catch (error) {
+      console.error("Error creating project update:", error);
+      throw error;
+    }
+  }
+  
+  async getProjectUpdates(projectId: number, publicOnly?: boolean): Promise<ProjectUpdate[]> {
+    try {
+      if (publicOnly) {
+        return await this.db
+          .select()
+          .from(projectUpdates)
+          .where(eq(projectUpdates.projectId, projectId))
+          .where(eq(projectUpdates.isPublic, true))
+          .orderBy(desc(projectUpdates.createdAt));
+      } else {
+        return await this.db
+          .select()
+          .from(projectUpdates)
+          .where(eq(projectUpdates.projectId, projectId))
+          .orderBy(desc(projectUpdates.createdAt));
+      }
+    } catch (error) {
+      console.error("Error getting project updates:", error);
+      return [];
+    }
+  }
+  
+  async getProjectUpdate(id: number): Promise<ProjectUpdate | undefined> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(projectUpdates)
+        .where(eq(projectUpdates.id, id));
+      return result;
+    } catch (error) {
+      console.error("Error getting project update:", error);
+      return undefined;
+    }
+  }
+  
+  async updateProjectUpdate(id: number, data: Partial<ProjectUpdate>): Promise<ProjectUpdate | undefined> {
+    try {
+      const [result] = await this.db
+        .update(projectUpdates)
+        .set(data)
+        .where(eq(projectUpdates.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating project update:", error);
+      return undefined;
+    }
+  }
+  
+  async deleteProjectUpdate(id: number): Promise<boolean> {
+    try {
+      const result = await this.db
+        .delete(projectUpdates)
+        .where(eq(projectUpdates.id, id));
+      return result.count > 0;
+    } catch (error) {
+      console.error("Error deleting project update:", error);
+      return false;
+    }
+  }
+  
+  // Project Comments
+  async createProjectComment(comment: InsertProjectComment): Promise<ProjectComment> {
+    try {
+      const [result] = await this.db.insert(projectComments).values(comment).returning();
+      return result;
+    } catch (error) {
+      console.error("Error creating project comment:", error);
+      throw error;
+    }
+  }
+  
+  async getProjectComments(projectId: number): Promise<ProjectComment[]> {
+    try {
+      return await this.db
+        .select()
+        .from(projectComments)
+        .where(eq(projectComments.projectId, projectId))
+        .orderBy(asc(projectComments.createdAt));
+    } catch (error) {
+      console.error("Error getting project comments:", error);
+      return [];
+    }
+  }
+  
+  async getProjectComment(id: number): Promise<ProjectComment | undefined> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(projectComments)
+        .where(eq(projectComments.id, id));
+      return result;
+    } catch (error) {
+      console.error("Error getting project comment:", error);
+      return undefined;
+    }
+  }
+  
+  async updateProjectComment(id: number, data: Partial<ProjectComment>): Promise<ProjectComment | undefined> {
+    try {
+      const [result] = await this.db
+        .update(projectComments)
+        .set(data)
+        .where(eq(projectComments.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating project comment:", error);
+      return undefined;
+    }
+  }
+  
+  async deleteProjectComment(id: number): Promise<boolean> {
+    try {
+      const result = await this.db
+        .delete(projectComments)
+        .where(eq(projectComments.id, id));
+      return result.count > 0;
+    } catch (error) {
+      console.error("Error deleting project comment:", error);
+      return false;
+    }
+  }
+  
+  // Orders
+  async createOrder(order: InsertOrder): Promise<Order> {
+    try {
+      const [result] = await this.db.insert(orders).values(order).returning();
+      return result;
+    } catch (error) {
+      console.error("Error creating order:", error);
+      throw error;
+    }
+  }
+  
+  async getOrders(userId?: number, status?: string): Promise<Order[]> {
+    try {
+      if (userId !== undefined && status !== undefined) {
+        return await this.db
+          .select()
+          .from(orders)
+          .where(eq(orders.userId, userId))
+          .where(eq(orders.status, status))
+          .orderBy(desc(orders.createdAt));
+      } else if (userId !== undefined) {
+        return await this.db
+          .select()
+          .from(orders)
+          .where(eq(orders.userId, userId))
+          .orderBy(desc(orders.createdAt));
+      } else if (status !== undefined) {
+        return await this.db
+          .select()
+          .from(orders)
+          .where(eq(orders.status, status))
+          .orderBy(desc(orders.createdAt));
+      } else {
+        return await this.db
+          .select()
+          .from(orders)
+          .orderBy(desc(orders.createdAt));
+      }
+    } catch (error) {
+      console.error("Error getting orders:", error);
+      return [];
+    }
+  }
+  
+  async getOrder(id: number): Promise<Order | undefined> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(orders)
+        .where(eq(orders.id, id));
+      return result;
+    } catch (error) {
+      console.error("Error getting order:", error);
+      return undefined;
+    }
+  }
+  
+  async updateOrder(id: number, data: Partial<Order>): Promise<Order | undefined> {
+    try {
+      const now = new Date();
+      const [result] = await this.db
+        .update(orders)
+        .set({ ...data, updatedAt: now })
+        .where(eq(orders.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating order:", error);
+      return undefined;
+    }
+  }
+  
+  async updateStripeInfo(userId: number, stripeCustomerId: string, orderId: number, stripePaymentId: string): Promise<Order | undefined> {
+    try {
+      const now = new Date();
+      const [result] = await this.db
+        .update(orders)
+        .set({ 
+          stripeCustomerId, 
+          stripePaymentId, 
+          status: "paid", 
+          updatedAt: now 
+        })
+        .where(eq(orders.id, orderId))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating stripe info:", error);
+      return undefined;
+    }
+  }
+  
+  // Order Items
+  async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
+    try {
+      const [result] = await this.db.insert(orderItems).values(item).returning();
+      return result;
+    } catch (error) {
+      console.error("Error creating order item:", error);
+      throw error;
+    }
+  }
+  
+  async getOrderItems(orderId: number): Promise<OrderItem[]> {
+    try {
+      return await this.db
+        .select()
+        .from(orderItems)
+        .where(eq(orderItems.orderId, orderId));
+    } catch (error) {
+      console.error("Error getting order items:", error);
+      return [];
+    }
+  }
+  
+  async getOrderItem(id: number): Promise<OrderItem | undefined> {
+    try {
+      const [result] = await this.db
+        .select()
+        .from(orderItems)
+        .where(eq(orderItems.id, id));
+      return result;
+    } catch (error) {
+      console.error("Error getting order item:", error);
+      return undefined;
+    }
+  }
+  
+  async updateOrderItem(id: number, data: Partial<OrderItem>): Promise<OrderItem | undefined> {
+    try {
+      const [result] = await this.db
+        .update(orderItems)
+        .set(data)
+        .where(eq(orderItems.id, id))
+        .returning();
+      return result;
+    } catch (error) {
+      console.error("Error updating order item:", error);
+      return undefined;
+    }
+  }
+  
+  async deleteOrderItem(id: number): Promise<boolean> {
+    try {
+      const result = await this.db
+        .delete(orderItems)
+        .where(eq(orderItems.id, id));
+      return result.count > 0;
+    } catch (error) {
+      console.error("Error deleting order item:", error);
+      return false;
+    }
   }
 }
 
