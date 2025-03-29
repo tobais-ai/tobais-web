@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, doublePrecision } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -102,7 +102,7 @@ export const testimonials = pgTable("testimonials", {
   company: text("company"),
   content: text("content").notNull(),
   contentEs: text("content_es"),
-  rating: integer("rating").default(5),
+  rating: doublePrecision("rating").default(5.0),
   image: text("image"),
   approved: boolean("approved").default(false),
 });
