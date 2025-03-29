@@ -2,7 +2,7 @@ import express, { type Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { insertContactSchema, insertProjectSchema, insertTestimonialSchema, insertSocialMediaSchema } from "@shared/schema";
+import { insertContactSchema, insertProjectSchema, insertTestimonialSchema, insertSocialMediaSchema, insertBlogPostSchema } from "@shared/schema";
 import { generateSocialMediaContent, generateMultiPlatformContent, generateContentRecommendations } from "./openai";
 import Stripe from "stripe";
 
@@ -272,6 +272,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Blog posts endpoints
+  
+  // Get published blog posts
+  app.get("/api/blog", async (req, res, next) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const posts = await storage.getBlogPosts(limit, true); // Only published posts
+      res.json(posts);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Get a single blog post by slug
+  app.get("/api/blog/:slug", async (req, res, next) => {
+    try {
+      const post = await storage.getBlogPostBySlug(req.params.slug);
+      if (!post) {
+        return res.status(404).json({ message: "Blog post not found" });
+      }
+      
+      // Only return published posts to public users
+      if (!post.published && (!req.isAuthenticated() || req.user?.role !== "admin")) {
+        return res.status(404).json({ message: "Blog post not found" });
+      }
+      
+      res.json(post);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Admin: Create a new blog post
+  app.post("/api/admin/blog", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated() || !req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Admin privileges required" });
+      }
+      
+      const postData = {
+        ...req.body,
+        authorId: req.user.id
+      };
+      
+      const validatedData = insertBlogPostSchema.parse(postData);
+      const post = await storage.createBlogPost(validatedData);
+      res.status(201).json(post);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Admin: Get all blog posts including drafts
+  app.get("/api/admin/blog", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated() || !req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Admin privileges required" });
+      }
+      
+      const posts = await storage.getBlogPosts();
+      res.json(posts);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Admin: Update a blog post
+  app.patch("/api/admin/blog/:id", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated() || !req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Admin privileges required" });
+      }
+      
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+      
+      const updated = await storage.updateBlogPost(id, req.body);
+      if (!updated) {
+        return res.status(404).json({ message: "Blog post not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Admin: Delete a blog post
+  app.delete("/api/admin/blog/:id", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated() || !req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Admin privileges required" });
+      }
+      
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+      
+      const success = await storage.deleteBlogPost(id);
+      if (!success) {
+        return res.status(404).json({ message: "Blog post not found" });
+      }
+      
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  });
+  
   // Stripe payment routes
   if (stripe) {
     app.post("/api/create-payment-intent", async (req, res, next) => {

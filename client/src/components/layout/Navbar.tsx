@@ -28,6 +28,7 @@ export default function Navbar() {
     { path: "/", label: t("navigation.home") },
     { path: "/services", label: t("navigation.services") },
     { path: "/about", label: t("navigation.about") },
+    { path: "/blog", label: t("navigation.blog") },
     { path: "/contact", label: t("navigation.contact") }
   ];
   

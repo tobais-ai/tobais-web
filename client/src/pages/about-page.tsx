@@ -67,7 +67,7 @@ export default function AboutPage() {
                   className="w-full h-64 object-cover object-center"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Alex Martinez</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Mateo Bourdillon</h3>
                   <p className="text-primary-600 dark:text-primary-400 mb-3">Founder & CEO</p>
                   <p className="text-gray-600 dark:text-gray-300">
                     Digital strategist with over 10 years of experience helping businesses transform their digital presence.
@@ -88,8 +88,8 @@ export default function AboutPage() {
                   className="w-full h-64 object-cover object-center"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Sarah Johnson</h3>
-                  <p className="text-primary-600 dark:text-primary-400 mb-3">Creative Director</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Diana Castro</h3>
+                  <p className="text-primary-600 dark:text-primary-400 mb-3">Founder & CEO</p>
                   <p className="text-gray-600 dark:text-gray-300">
                     Award-winning designer specializing in brand identity and UI/UX design for digital platforms.
                   </p>
@@ -108,13 +108,6 @@ export default function AboutPage() {
                   alt="Team member" 
                   className="w-full h-64 object-cover object-center"
                 />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Miguel Ramirez</h3>
-                  <p className="text-primary-600 dark:text-primary-400 mb-3">Technology Lead</p>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Full-stack developer with expertise in creating seamless, cutting-edge digital experiences.
-                  </p>
-                </div>
               </motion.div>
             </div>
           </div>

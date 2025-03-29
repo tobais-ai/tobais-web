@@ -6,7 +6,7 @@ type Language = 'en' | 'es';
 
 interface LanguageContextType {
   language: Language;
-  t: (key: string) => string;
+  t: (key: string, fallback?: string) => string;
   toggleLanguage: () => void;
   setLanguage: (lang: Language) => void;
 }
@@ -18,7 +18,7 @@ const translations = {
 
 export const LanguageContext = createContext<LanguageContextType>({
   language: 'en',
-  t: key => key,
+  t: (key, fallback) => fallback || key,
   toggleLanguage: () => {},
   setLanguage: () => {}
 });
@@ -40,7 +40,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
   
   // Translation function
-  const t = (key: string): string => {
+  const t = (key: string, fallback?: string): string => {
     const keys = key.split('.');
     let translation: any = translations[language];
     
@@ -48,8 +48,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       if (translation && translation[k]) {
         translation = translation[k];
       } else {
-        // Fallback to key if translation not found
-        return key;
+        // Fallback to provided fallback or key if translation not found
+        return fallback || key;
       }
     }
     
