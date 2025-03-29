@@ -49,6 +49,17 @@ export const enTranslations = {
         "Marketing materials"
       ],
       price: "starting at"
+    },
+    socialMedia: {
+      title: "Social Media Marketing",
+      description: "Engage with your audience through strategic social media marketing campaigns.",
+      features: [
+        "Facebook marketing",
+        "Instagram content",
+        "WhatsApp campaigns",
+        "LinkedIn strategy"
+      ],
+      price: "starting at"
     }
   },
   about: {

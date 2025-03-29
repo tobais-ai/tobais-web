@@ -49,6 +49,17 @@ export const esTranslations = {
         "Materiales de marketing"
       ],
       price: "desde"
+    },
+    socialMedia: {
+      title: "Marketing en Redes Sociales",
+      description: "Conecte con su audiencia a través de campañas estratégicas de marketing en redes sociales.",
+      features: [
+        "Marketing en Facebook",
+        "Contenido para Instagram",
+        "Campañas en WhatsApp",
+        "Estrategia para LinkedIn"
+      ],
+      price: "desde"
     }
   },
   about: {

@@ -139,6 +139,17 @@ export class MemStorage implements IStorage {
         featuresEs: JSON.stringify(["Diseño de logo", "Estrategia de marca", "Materiales de marketing"]),
         icon: "paint-brush",
         sortOrder: 3
+      },
+      {
+        name: "Social Media Marketing",
+        nameEs: "Marketing en Redes Sociales",
+        description: "Engage with your audience through strategic social media marketing campaigns on Facebook, Instagram, WhatsApp, and LinkedIn.",
+        descriptionEs: "Conecte con su audiencia a través de campañas estratégicas de marketing en redes sociales en Facebook, Instagram, WhatsApp y LinkedIn.",
+        price: 699,
+        features: JSON.stringify(["Facebook marketing", "Instagram content", "WhatsApp campaigns", "LinkedIn strategy"]),
+        featuresEs: JSON.stringify(["Marketing en Facebook", "Contenido para Instagram", "Campañas en WhatsApp", "Estrategia para LinkedIn"]),
+        icon: "share-alt",
+        sortOrder: 4
       }
     ];
     
