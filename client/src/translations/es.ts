@@ -60,6 +60,17 @@ export const esTranslations = {
         "Estrategia para LinkedIn"
       ],
       price: "desde"
+    },
+    accounting: {
+      title: "Contabilidad",
+      description: "Servicios de contabilidad profesionales para ayudar a gestionar las finanzas de su negocio de manera efectiva.",
+      features: [
+        "Teneduría de libros",
+        "Preparación de impuestos",
+        "Informes financieros",
+        "Consultoría empresarial"
+      ],
+      price: "desde"
     }
   },
   about: {

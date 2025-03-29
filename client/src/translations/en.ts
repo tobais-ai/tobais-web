@@ -60,6 +60,17 @@ export const enTranslations = {
         "LinkedIn strategy"
       ],
       price: "starting at"
+    },
+    accounting: {
+      title: "Accounting",
+      description: "Professional accounting services to help manage your business finances effectively.",
+      features: [
+        "Bookkeeping",
+        "Tax preparation",
+        "Financial reporting",
+        "Business consulting"
+      ],
+      price: "starting at"
     }
   },
   about: {

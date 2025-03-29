@@ -150,6 +150,17 @@ export class MemStorage implements IStorage {
         featuresEs: JSON.stringify(["Marketing en Facebook", "Contenido para Instagram", "Campañas en WhatsApp", "Estrategia para LinkedIn"]),
         icon: "share-alt",
         sortOrder: 4
+      },
+      {
+        name: "Accounting",
+        nameEs: "Contabilidad",
+        description: "Professional accounting services to help manage your business finances effectively.",
+        descriptionEs: "Servicios de contabilidad profesionales para ayudar a gestionar las finanzas de su negocio de manera efectiva.",
+        price: 499,
+        features: JSON.stringify(["Bookkeeping", "Tax preparation", "Financial reporting", "Business consulting"]),
+        featuresEs: JSON.stringify(["Teneduría de libros", "Preparación de impuestos", "Informes financieros", "Consultoría empresarial"]),
+        icon: "calculator",
+        sortOrder: 5
       }
     ];
     
