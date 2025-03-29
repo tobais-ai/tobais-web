@@ -115,6 +115,7 @@ export const insertTestimonialSchema = createInsertSchema(testimonials).pick({
   contentEs: true,
   rating: true,
   image: true,
+  approved: true,
 });
 
 // Social Media Content Table
