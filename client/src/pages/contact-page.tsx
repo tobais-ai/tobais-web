@@ -71,17 +71,6 @@ export default function ContactPage() {
                     title="Miami Office Location"
                   ></iframe>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Miami Office</h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    123 Biscayne Blvd, <br />
-                    Miami, FL 33132, <br />
-                    United States
-                  </p>
-                  <p className="mt-4 text-primary-600 dark:text-primary-400">
-                    +1 (555) 123-4567
-                  </p>
-                </div>
               </motion.div>
 
               <motion.div 
@@ -91,29 +80,6 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="aspect-video w-full">
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d254508.51141489705!2d-74.24789625449921!3d4.648618493988507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9bfd2da6cb29%3A0x239d635520a33914!2sBogot%C3%A1%2C%20Colombia!5e0!3m2!1sen!2sus!4v1651234567890!5m2!1sen!2sus" 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0 }} 
-                    allowFullScreen 
-                    loading="lazy" 
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Bogota Office Location"
-                  ></iframe>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Bogotá Office</h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Calle 93 #13-24, <br />
-                    Bogotá, <br />
-                    Colombia
-                  </p>
-                  <p className="mt-4 text-primary-600 dark:text-primary-400">
-                    +57 (1) 987-6543
-                  </p>
-                </div>
               </motion.div>
             </div>
           </div>

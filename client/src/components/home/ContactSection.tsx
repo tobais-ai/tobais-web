@@ -194,7 +194,8 @@ export default function ContactSection() {
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                       {t("contact.info.email")}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300">hello@tobais.com</p>
+                    <p className="text-gray-600 dark:text-gray-300">mbourdillon@tobais.com</p>
+                    <p className="text-gray-600 dark:text-gray-300">dtoro@tobais.com</p>
                   </div>
                 </div>
                 
@@ -206,7 +207,7 @@ export default function ContactSection() {
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                       {t("contact.info.phone")}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300">+1 (555) 123-4567</p>
+                    <p className="text-gray-600 dark:text-gray-300">+1 (704) 207-1760</p>
                   </div>
                 </div>
                 
@@ -235,14 +236,8 @@ export default function ContactSection() {
                 <a href="#" className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 text-2xl transition-colors" aria-label="Facebook">
                   <i className="fab fa-facebook"></i>
                 </a>
-                <a href="#" className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 text-2xl transition-colors" aria-label="Twitter">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="#" className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 text-2xl transition-colors" aria-label="Instagram">
+                <a href="https://www.instagram.com/tobais.official/" className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 text-2xl transition-colors" aria-label="Instagram">
                   <i className="fab fa-instagram"></i>
-                </a>
-                <a href="#" className="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 text-2xl transition-colors" aria-label="LinkedIn">
-                  <i className="fab fa-linkedin"></i>
                 </a>
               </div>
             </div>

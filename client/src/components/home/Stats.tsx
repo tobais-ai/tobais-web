@@ -41,7 +41,7 @@ export default function Stats() {
   ];
   
   return (
-    <section className="py-12 bg-primary-900 text-white">
+    <section className="py-12 bg-primary-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10" ref={ref}>
           {stats.map((stat, index) => (
@@ -52,7 +52,7 @@ export default function Stats() {
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="p-3 bg-white/10 rounded-full mb-4 text-primary-200">
+              <div className="p-3 bg-black/10 rounded-full mb-4 text-primary-200">
                 {stat.icon}
               </div>
               

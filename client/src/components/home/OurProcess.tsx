@@ -110,7 +110,7 @@ export default function OurProcess() {
           <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-6">
             {t("process.cta.description")}
           </p>
-          <button className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg">
+          <button className="bg-primary-600 hover:bg-primary-700 font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg">
             {t("process.cta.button")}
           </button>
         </motion.div>

@@ -53,7 +53,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <motion.div 
                 className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden text-center"
                 initial={{ opacity: 0, y: 20 }}
@@ -94,20 +94,6 @@ export default function AboutPage() {
                     Award-winning designer specializing in brand identity and UI/UX design for digital platforms.
                   </p>
                 </div>
-              </motion.div>
-
-              <motion.div 
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.3 }}
-              >
-                <img 
-                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                  alt="Team member" 
-                  className="w-full h-64 object-cover object-center"
-                />
               </motion.div>
             </div>
           </div>

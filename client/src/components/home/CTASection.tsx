@@ -16,24 +16,24 @@ export default function CTASection() {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-2xl md:text-3xl font-bold font-['Poppins'] text-white mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold font-['Poppins'] mb-4">
           {t("cta.title")}
         </h2>
         
-        <p className="text-white/80 mb-8 max-w-2xl mx-auto">
+        <p className="mb-8 max-w-2xl mx-auto">
           {t("cta.description")}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/contact">
-            <Button className="bg-white text-primary-600 hover:bg-gray-100 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-6 py-3 transition-all duration-200 shadow-lg flex items-center gap-2">
+            <Button variant="secondary" className="border-2 hover:bg-white/10 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-6 py-3 transition-all duration-200 flex items-center gap-2">
               <FaRocket className="shrink-0" />
               <span>{t("cta.button1")}</span>
             </Button>
           </Link>
           
           <Link href="/services">
-            <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-6 py-3 transition-all duration-200 flex items-center gap-2">
+            <Button variant="outline" className="border-2 hover:bg-white/10 hover:scale-105 focus:ring-4 focus:ring-white/30 font-medium rounded-lg text-sm px-6 py-3 transition-all duration-200 flex items-center gap-2">
               <FaInfoCircle className="shrink-0" />
               <span>{t("cta.button2")}</span>
             </Button>
