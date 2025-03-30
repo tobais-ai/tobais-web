@@ -163,6 +163,40 @@ export const enTranslations = {
     copyright: "© 2023 TOBAIS. All rights reserved.",
     language: "English"
   },
+  ai: {
+    label: "AI-POWERED SOLUTIONS",
+    title: "Transform Your Digital Marketing with AI",
+    description: "Our suite of AI-powered tools helps businesses create engaging content, analyze market trends, and deliver personalized experiences that drive growth.",
+    learnMore: "Learn More",
+    getStarted: "Get Started",
+    solutions: {
+      contentGeneration: {
+        title: "Content Generation",
+        description: "AI-powered tool to create engaging social media content for multiple platforms."
+      },
+      multilingual: {
+        title: "Multilingual Support",
+        description: "Automatically translate and adapt your content for global audiences."
+      },
+      brandingAssistant: {
+        title: "Branding Assistant",
+        description: "AI tools that help develop and maintain consistent brand messaging."
+      },
+      customerSupport: {
+        title: "Customer Support",
+        description: "Intelligent chatbots and support systems to improve customer experience."
+      },
+      marketAnalysis: {
+        title: "Market Analysis",
+        description: "Data-driven insights to understand market trends and customer behavior."
+      }
+    },
+    cta: {
+      title: "Ready to leverage AI for your business?",
+      description: "Create an account to access our full suite of AI-powered marketing tools.",
+      button: "Get Access Now"
+    }
+  },
   auth: {
     loginTitle: "Welcome Back",
     loginSubtitle: "Sign in to access your account",

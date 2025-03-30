@@ -163,6 +163,40 @@ export const esTranslations = {
     copyright: "© 2023 TOBAIS. Todos los derechos reservados.",
     language: "Español"
   },
+  ai: {
+    label: "SOLUCIONES IMPULSADAS POR IA",
+    title: "Transforma tu Marketing Digital con IA",
+    description: "Nuestra suite de herramientas impulsadas por IA ayuda a las empresas a crear contenido atractivo, analizar tendencias del mercado y ofrecer experiencias personalizadas que impulsan el crecimiento.",
+    learnMore: "Más Información",
+    getStarted: "Comenzar",
+    solutions: {
+      contentGeneration: {
+        title: "Generación de Contenido",
+        description: "Herramienta impulsada por IA para crear contenido atractivo para múltiples plataformas de redes sociales."
+      },
+      multilingual: {
+        title: "Soporte Multilingüe",
+        description: "Traduce y adapta automáticamente tu contenido para audiencias globales."
+      },
+      brandingAssistant: {
+        title: "Asistente de Marca",
+        description: "Herramientas de IA que ayudan a desarrollar y mantener mensajes de marca consistentes."
+      },
+      customerSupport: {
+        title: "Soporte al Cliente",
+        description: "Chatbots inteligentes y sistemas de soporte para mejorar la experiencia del cliente."
+      },
+      marketAnalysis: {
+        title: "Análisis de Mercado",
+        description: "Insights basados en datos para entender tendencias del mercado y comportamiento del cliente."
+      }
+    },
+    cta: {
+      title: "¿Listo para aprovechar la IA en tu negocio?",
+      description: "Crea una cuenta para acceder a nuestra suite completa de herramientas de marketing impulsadas por IA.",
+      button: "Obtener Acceso Ahora"
+    }
+  },
   auth: {
     loginTitle: "Bienvenido de Nuevo",
     loginSubtitle: "Inicie sesión para acceder a su cuenta",
