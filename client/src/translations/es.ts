@@ -103,7 +103,7 @@ export const esTranslations = {
   },
   about: {
     title: "Sobre TOBAIS",
-    description: "TOBAIS es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en EE.UU. y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para ofrecer soluciones que impulsan el crecimiento.",
+    description: "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en EE.UU. y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para ofrecer soluciones que impulsan el crecimiento.",
     mission: {
       title: "Nuestra Misión",
       description: "Proporcionar soluciones digitales accesibles y de alta calidad que nivelen el campo de juego para pequeñas empresas que compiten en el panorama digital."
