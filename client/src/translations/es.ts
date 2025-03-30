@@ -139,6 +139,10 @@ export const esTranslations = {
         title: "Agenda una Consulta",
         description: "Reserve una consulta gratuita de 30 minutos para discutir las necesidades de su proyecto.",
         button: "Reservar una cita"
+      },
+      map: {
+        title: "Encuéntranos",
+        description: "Nuestras oficinas en Charlotte (Carolina del Norte) y Montevideo (Uruguay) están estratégicamente ubicadas para atender a clientes tanto en América del Norte como en América del Sur."
       }
     }
   },

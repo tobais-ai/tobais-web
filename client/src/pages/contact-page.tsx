@@ -44,10 +44,10 @@ export default function ContactPage() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl font-bold font-['Poppins'] text-gray-900 dark:text-white mb-4">
-                Find Us
+                {t("contact.info.map.title")}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Our offices are strategically located to serve clients in both North and South America.
+                {t("contact.info.map.description")}
               </p>
             </motion.div>
 
@@ -61,14 +61,14 @@ export default function ContactPage() {
               >
                 <div className="aspect-video w-full">
                   <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114964.53925916665!2d-80.29949920266738!3d25.782390733064336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b0a20ec8c111%3A0xff96f271ddad4f65!2sMiami%2C%20FL!5e0!3m2!1sen!2sus!4v1651234567890!5m2!1sen!2sus" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104994.80811241799!2d-80.90744300886853!3d35.22639499509289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88541fc4fc381a81%3A0x884650e6bf43d164!2sCharlotte%2C%20NC%2C%20USA!5e0!3m2!1sen!2sus!4v1714866893044!5m2!1sen!2sus" 
                     width="100%" 
                     height="100%" 
                     style={{ border: 0 }} 
                     allowFullScreen 
                     loading="lazy" 
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Miami Office Location"
+                    title="Charlotte, NC Office Location"
                   ></iframe>
                 </div>
               </motion.div>
@@ -80,6 +80,18 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
+                <div className="aspect-video w-full">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d209825.59702315028!2d-56.408206486509664!3d-34.83381303611366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x959f80ffc63bf7d3%3A0x6b321b2e355bec99!2sMontevideo%2C%20Montevideo%20Department%2C%20Uruguay!5e0!3m2!1sen!2sus!4v1714866907927!5m2!1sen!2sus" 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }} 
+                    allowFullScreen 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Montevideo, Uruguay Office Location"
+                  ></iframe>
+                </div>
               </motion.div>
             </div>
           </div>

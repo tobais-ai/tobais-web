@@ -139,6 +139,10 @@ export const enTranslations = {
         title: "Schedule a Consultation",
         description: "Book a free 30-minute consultation to discuss your project needs.",
         button: "Book an appointment"
+      },
+      map: {
+        title: "Find Us",
+        description: "Our offices in Charlotte (North Carolina) and Montevideo (Uruguay) are strategically located to serve clients in both North and South America."
       }
     }
   },
