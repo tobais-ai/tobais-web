@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaGlobe } from "react-icons/fa";
+import tobaisLogo from "@/assets/tobais-logo.png";
 
 export default function Footer() {
   const { t, language, toggleLanguage } = useLanguage();
@@ -10,7 +11,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <div className="text-2xl font-['Poppins'] font-bold text-white mb-4">TOBAIS</div>
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center overflow-hidden border-2 border-primary-500 mr-3">
+                <img 
+                  src={tobaisLogo} 
+                  alt="TOBAIS Logo" 
+                  className="h-12 w-12 object-cover" 
+                />
+              </div>
+            </div>
             <p className="text-gray-400 mb-4">
               {t("footer.description")}
             </p>
@@ -21,7 +30,7 @@ export default function Footer() {
               <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
                 <FaTwitter />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/tobais.official" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
                 <FaInstagram />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
