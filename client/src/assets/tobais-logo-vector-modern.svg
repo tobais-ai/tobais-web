@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <!-- Fondo circular -->
+  <circle cx="250" cy="250" r="240" fill="black" />
+  
+  <!-- Toro moderno con efecto 3D -->
+  <g id="bull-head-modern">
+    <!-- Definición de gradientes -->
+    <defs>
+      <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1e40af" /> <!-- Azul oscuro -->
+        <stop offset="100%" stop-color="#3b82f6" /> <!-- Azul claro -->
+      </linearGradient>
+      
+      <linearGradient id="pink-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#be185d" /> <!-- Rosa oscuro -->
+        <stop offset="100%" stop-color="#ec4899" /> <!-- Rosa claro -->
+      </linearGradient>
+      
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#000000" flood-opacity="0.3"/>
+      </filter>
+    </defs>
+    
+    <!-- Forma principal azul -->
+    <path d="M250 110
+             C190 110, 140 150, 120 200
+             C100 250, 110 310, 150 350
+             C190 390, 250 400, 300 380
+             C350 360, 380 320, 390 270
+             C400 220, 380 170, 340 130
+             C310 110, 280 110, 250 110 Z" 
+          fill="url(#blue-gradient)" 
+          filter="url(#shadow)" />
+    
+    <!-- Detalles rosa -->
+    <path d="M180 160
+             C160 170, 150 200, 160 230
+             C170 260, 200 280, 230 270
+             C260 260, 280 230, 270 200
+             C260 170, 220 150, 180 160 Z" 
+          fill="url(#pink-gradient)" 
+          filter="url(#shadow)" />
+    
+    <path d="M320 160
+             C280 150, 240 170, 230 200
+             C220 230, 240 260, 270 270
+             C300 280, 330 260, 340 230
+             C350 200, 340 170, 320 160 Z" 
+          fill="url(#pink-gradient)" 
+          filter="url(#shadow)" />
+    
+    <!-- Cuernos -->
+    <path d="M150 180
+             C130 160, 100 130, 90 100
+             C85 80, 90 60, 110 70
+             C130 80, 140 110, 150 140
+             L150 180 Z" 
+          fill="url(#blue-gradient)" 
+          filter="url(#shadow)" />
+    
+    <path d="M350 180
+             C370 160, 400 130, 410 100
+             C415 80, 410 60, 390 70
+             C370 80, 360 110, 350 140
+             L350 180 Z" 
+          fill="url(#blue-gradient)" 
+          filter="url(#shadow)" />
+    
+    <!-- Ojos -->
+    <circle cx="200" cy="220" r="15" fill="white" filter="url(#shadow)" />
+    <circle cx="300" cy="220" r="15" fill="white" filter="url(#shadow)" />
+    <circle cx="200" cy="220" r="8" fill="black" />
+    <circle cx="300" cy="220" r="8" fill="black" />
+    
+    <!-- Nariz y detalles faciales -->
+    <path d="M230 280
+             C240 290, 260 290, 270 280
+             C280 270, 280 250, 270 240
+             C260 230, 240 230, 230 240
+             C220 250, 220 270, 230 280 Z" 
+          fill="#111111" />
+          
+    <!-- Reflejos -->
+    <path d="M170 150
+             C180 140, 190 135, 200 140
+             C190 145, 180 150, 170 150 Z" 
+          fill="white" opacity="0.5" />
+          
+    <path d="M330 150
+             C320 140, 310 135, 300 140
+             C310 145, 320 150, 330 150 Z" 
+          fill="white" opacity="0.5" />
+  </g>
+</svg>
