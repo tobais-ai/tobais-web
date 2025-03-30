@@ -22,7 +22,9 @@ export default function Navbar() {
   }, [location]);
   
   const isActive = (path: string) => {
-    return location === path ? "border-primary-500" : "border-transparent hover:border-primary-300";
+    return location === path 
+      ? "border-primary-500 text-primary-600 dark:text-primary-400 font-semibold" 
+      : "border-transparent hover:border-primary-300 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400";
   };
   
   const navItems = [
@@ -135,7 +137,11 @@ export default function Navbar() {
             <Link 
               key={item.path} 
               href={item.path}
-              className={`block pl-3 pr-4 py-2 border-l-4 ${location === item.path ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30' : 'border-transparent hover:bg-gray-50 dark:hover:bg-gray-700'} text-base font-medium transition-colors`}
+              className={`block pl-3 pr-4 py-2 border-l-4 ${
+                location === item.path 
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-semibold' 
+                  : 'border-transparent hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+              } text-base font-medium transition-colors`}
             >
               {item.label}
             </Link>
