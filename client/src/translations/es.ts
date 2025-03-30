@@ -103,7 +103,7 @@ export const esTranslations = {
   },
   about: {
     title: "Sobre TOBAIS",
-    description: "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en EE.UU. y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para ofrecer soluciones que impulsan el crecimiento.",
+    description: "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en US y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para ofrecer soluciones que impulsan el crecimiento.",
     mission: {
       title: "Nuestra Misión",
       description: "Proporcionar soluciones digitales accesibles y de alta calidad que nivelen el campo de juego para pequeñas empresas que compiten en el panorama digital."
@@ -134,8 +134,8 @@ export const esTranslations = {
         answer: "Nuestros servicios de automatización incluyen automatización de flujos de trabajo, automatización de marketing por correo electrónico, programación de redes sociales, gestión de datos de clientes, integración de CRM y creación de contenido impulsada por IA. Personalizamos soluciones basadas en sus necesidades comerciales específicas."
       },
       {
-        question: "¿Trabajan con clientes tanto en EE.UU. como en América Latina?",
-        answer: "Sí, con orgullo servimos a clientes tanto en EE.UU. como en toda América Latina. Nuestro equipo es completamente bilingüe (inglés/español) y está familiarizado con los panoramas empresariales en ambas regiones, lo que nos permite proporcionar soluciones culturalmente relevantes."
+        question: "¿Trabajan con clientes tanto en U.S. como en América Latina?",
+        answer: "Sí, con orgullo servimos a clientes tanto en U.S. como en toda América Latina. Nuestro equipo es completamente bilingüe (inglés/español) y está familiarizado con los panoramas empresariales en ambas regiones, lo que nos permite proporcionar soluciones culturalmente relevantes."
       }
     ]
   },
@@ -161,7 +161,7 @@ export const esTranslations = {
       email: "Correo Electrónico",
       phone: "Teléfono",
       locations: "Ubicaciones de Oficinas",
-      locationText: "Charlotte, NC (EE.UU.) & Montevideo (Uruguay)",
+      locationText: "Charlotte, NC (U.S.) & Montevideo (Uruguay)",
       connect: "Conéctate Con Nosotros",
       schedule: {
         title: "Agenda una Consulta",
@@ -170,7 +170,7 @@ export const esTranslations = {
       },
       map: {
         title: "Encuéntranos",
-        description: "Nuestras oficinas en Charlotte (Carolina del Norte) y Montevideo (Uruguay) están estratégicamente ubicadas para atender a clientes tanto en América del Norte como en América del Sur."
+        description: "Nuestras oficinas en Charlotte (North Carolina) y Montevideo (Uruguay) están estratégicamente ubicadas para atender a clientes tanto en América del Norte como en América del Sur."
       }
     }
   },
@@ -181,7 +181,7 @@ export const esTranslations = {
     button2: "Más Información"
   },
   footer: {
-    description: "Soluciones digitales inteligentes para empresas en EE.UU. y América Latina.",
+    description: "Soluciones digitales inteligentes para empresas en U.S. y América Latina.",
     services: "Servicios",
     company: "Compañía",
     legal: "Legal",
