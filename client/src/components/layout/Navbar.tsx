@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Moon, Sun, Menu, X } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -44,7 +45,8 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/">
+              <Link href="/" className="flex items-center">
+                <Logo className="h-10 w-10 mr-2 text-primary-600 dark:text-primary-400" />
                 <span className="text-2xl font-['Poppins'] font-bold text-primary-600 dark:text-primary-400 cursor-pointer">TOBAIS</span>
               </Link>
             </div>
