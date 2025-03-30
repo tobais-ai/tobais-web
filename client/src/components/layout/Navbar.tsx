@@ -23,7 +23,7 @@ export default function Navbar() {
   
   const isActive = (path: string) => {
     return location === path 
-      ? "border-primary-500 text-primary-600 dark:text-primary-400 font-semibold" 
+      ? "border-primary-500 dark:border-primary-400 border-b-[3px] text-primary-600 dark:text-primary-300 font-semibold bg-gray-50 dark:bg-gray-700" 
       : "border-transparent hover:border-primary-300 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400";
   };
   
@@ -62,7 +62,7 @@ export default function Navbar() {
             {/* Desktop menu */}
             <div className="hidden md:ml-6 md:flex md:space-x-8">
               {navItems.map((item) => (
-                <Link key={item.path} href={item.path} className={`inline-flex items-center px-1 pt-1 border-b-2 ${isActive(item.path)} text-sm font-medium transition-colors`}>
+                <Link key={item.path} href={item.path} className={`inline-flex items-center px-3 py-2 border-b-2 rounded-t-md ${isActive(item.path)} text-sm font-medium transition-all`}>
                   {item.label}
                 </Link>
               ))}
@@ -139,7 +139,7 @@ export default function Navbar() {
               href={item.path}
               className={`block pl-3 pr-4 py-2 border-l-4 ${
                 location === item.path 
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-semibold' 
+                  ? 'border-primary-500 dark:border-primary-300 border-l-[4px] bg-primary-50 dark:bg-primary-900/50 text-primary-600 dark:text-primary-300 font-semibold' 
                   : 'border-transparent hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
               } text-base font-medium transition-colors`}
             >
