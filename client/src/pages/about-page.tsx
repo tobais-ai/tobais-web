@@ -26,7 +26,10 @@ export default function AboutPage() {
                 {t("about.title")}
               </h1>
               <p className="text-xl max-w-3xl mx-auto opacity-90">
-                {t("about.description").split('.')[0] + '.'}
+                {t("language") === "en" 
+                  ? "TOBAIS, Technology on Business Artificial Intelligence Solutions, is a creative digital agency committed to empowering small businesses across the U.S. and Latin America."
+                  : "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en U.S. y América Latina."
+                }
               </p>
             </motion.div>
           </div>
