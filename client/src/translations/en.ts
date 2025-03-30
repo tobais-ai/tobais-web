@@ -294,5 +294,32 @@ export const enTranslations = {
     viewDashboard: "View Dashboard",
     returnHome: "Return to Home",
     supportMessage: "If you have any questions about your purchase, please contact us at:"
+  },
+  process: {
+    title: "Our Process",
+    subtitle: "We follow a streamlined approach to deliver exceptional digital solutions for your business",
+    steps: {
+      discover: {
+        title: "Discovery",
+        description: "We start by understanding your business, goals, and target audience to establish clear project objectives."
+      },
+      design: {
+        title: "Design",
+        description: "Our creative team develops mockups and prototypes that align with your brand and user experience requirements."
+      },
+      develop: {
+        title: "Development",
+        description: "We build your solution using cutting-edge technologies, ensuring responsive, scalable, and secure implementation."
+      },
+      deliver: {
+        title: "Delivery",
+        description: "After thorough testing, we launch your project and provide training and ongoing support as needed."
+      }
+    },
+    cta: {
+      title: "Ready to Start Your Project?",
+      description: "Let's collaborate to create a digital solution that helps your business thrive in today's competitive landscape.",
+      button: "Get Started"
+    }
   }
 };

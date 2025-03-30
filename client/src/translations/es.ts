@@ -294,5 +294,32 @@ export const esTranslations = {
     viewDashboard: "Ver Panel de Control",
     returnHome: "Volver al Inicio",
     supportMessage: "Si tiene alguna pregunta sobre su compra, por favor contáctenos en:"
+  },
+  process: {
+    title: "Nuestro Proceso",
+    subtitle: "Seguimos un enfoque optimizado para entregar soluciones digitales excepcionales para su negocio",
+    steps: {
+      discover: {
+        title: "Descubrimiento",
+        description: "Comenzamos entendiendo su negocio, objetivos y audiencia objetivo para establecer objetivos claros del proyecto."
+      },
+      design: {
+        title: "Diseño",
+        description: "Nuestro equipo creativo desarrolla maquetas y prototipos que se alinean con su marca y requisitos de experiencia de usuario."
+      },
+      develop: {
+        title: "Desarrollo",
+        description: "Construimos su solución utilizando tecnologías de vanguardia, asegurando una implementación responsiva, escalable y segura."
+      },
+      deliver: {
+        title: "Entrega",
+        description: "Después de pruebas exhaustivas, lanzamos su proyecto y proporcionamos capacitación y soporte continuo según sea necesario."
+      }
+    },
+    cta: {
+      title: "¿Listo para Iniciar su Proyecto?",
+      description: "Colaboremos para crear una solución digital que ayude a su negocio a prosperar en el panorama competitivo actual.",
+      button: "Comenzar"
+    }
   }
 };
