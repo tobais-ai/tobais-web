@@ -9,6 +9,34 @@ export const esTranslations = {
     dashboard: "Panel",
     logout: "Cerrar Sesión"
   },
+  blog: {
+    title: "Blog",
+    subtitle: "Los últimos artículos, ideas y actualizaciones de nuestro equipo"
+  },
+  team: {
+    title: "Nuestro Equipo",
+    subtitle: "Conozca a los profesionales talentosos dedicados a ayudar a su negocio a tener éxito en el panorama digital"
+  },
+  values: {
+    title: "Nuestros Valores",
+    subtitle: "Los principios fundamentales que guían nuestro trabajo y relaciones con los clientes",
+    excellence: {
+      title: "Excelencia",
+      description: "Nos esforzamos por la excelencia en cada proyecto, centrándonos en la calidad, la innovación y los resultados."
+    },
+    clientFocus: {
+      title: "Enfoque en el Cliente",
+      description: "Ponemos las necesidades de nuestros clientes en primer lugar, construyendo relaciones sólidas basadas en la confianza y la comunicación."
+    },
+    innovation: {
+      title: "Innovación",
+      description: "Abrazamos tecnologías de vanguardia y pensamiento creativo para ofrecer soluciones innovadoras."
+    },
+    globalVision: {
+      title: "Visión Global",
+      description: "Aportamos una perspectiva multicultural que atiende a clientes diversos en EE.UU. y América Latina."
+    }
+  },
   hero: {
     title: "Soluciones Digitales Inteligentes para su Negocio",
     subtitle: "TOBAIS es una agencia creativa enfocada en Diseño Web, Automatización y Branding para negocios en EE.UU. y LATAM.",

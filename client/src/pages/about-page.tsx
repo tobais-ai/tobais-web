@@ -46,10 +46,10 @@ export default function AboutPage() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold font-['Poppins'] text-gray-900 dark:text-white mb-4">
-                Our Team
+                {t("team.title", "Our Team")}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Meet the talented professionals dedicated to helping your business succeed in the digital landscape.
+                {t("team.subtitle", "Meet the talented professionals dedicated to helping your business succeed in the digital landscape.")}
               </p>
             </motion.div>
 
@@ -68,9 +68,11 @@ export default function AboutPage() {
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white">Mateo Bourdillon</h3>
-                  <p className="text-primary-600 dark:text-primary-400 mb-3">Founder & CEO</p>
+                  <p className="text-primary-600 dark:text-primary-400 mb-3">
+                    {t("team.founderCeo", "Founder & CEO")}
+                  </p>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Digital strategist with over 10 years of experience helping businesses transform their digital presence.
+                    {t("team.mateoDescription", "Digital strategist with over 10 years of experience helping businesses transform their digital presence.")}
                   </p>
                 </div>
               </motion.div>
@@ -89,9 +91,11 @@ export default function AboutPage() {
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white">Diana Castro</h3>
-                  <p className="text-primary-600 dark:text-primary-400 mb-3">Founder & CEO</p>
+                  <p className="text-primary-600 dark:text-primary-400 mb-3">
+                    {t("team.founderCeo", "Founder & CEO")}
+                  </p>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Award-winning designer specializing in brand identity and UI/UX design for digital platforms.
+                    {t("team.dianaDescription", "Award-winning designer specializing in brand identity and UI/UX design for digital platforms.")}
                   </p>
                 </div>
               </motion.div>
@@ -113,10 +117,10 @@ export default function AboutPage() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold font-['Poppins'] text-gray-900 dark:text-white mb-4">
-                Our Values
+                {t("values.title", "Our Values")}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                The core principles that guide our work and relationships with clients.
+                {t("values.subtitle", "The core principles that guide our work and relationships with clients.")}
               </p>
             </motion.div>
 
@@ -133,9 +137,11 @@ export default function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Excellence</h3>
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                  {t("values.excellence.title", "Excellence")}
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  We strive for excellence in every project, focusing on quality, innovation, and results.
+                  {t("values.excellence.description", "We strive for excellence in every project, focusing on quality, innovation, and results.")}
                 </p>
               </motion.div>
 
@@ -151,9 +157,11 @@ export default function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Client Focus</h3>
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                  {t("values.clientFocus.title", "Client Focus")}
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  We put our clients' needs first, building strong relationships based on trust and communication.
+                  {t("values.clientFocus.description", "We put our clients' needs first, building strong relationships based on trust and communication.")}
                 </p>
               </motion.div>
 
@@ -169,9 +177,11 @@ export default function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Innovation</h3>
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                  {t("values.innovation.title", "Innovation")}
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  We embrace cutting-edge technologies and creative thinking to deliver forward-thinking solutions.
+                  {t("values.innovation.description", "We embrace cutting-edge technologies and creative thinking to deliver forward-thinking solutions.")}
                 </p>
               </motion.div>
 
@@ -187,9 +197,11 @@ export default function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Global Vision</h3>
+                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                  {t("values.globalVision.title", "Global Vision")}
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  We bring a multicultural perspective that serves diverse clients across the U.S. and Latin America.
+                  {t("values.globalVision.description", "We bring a multicultural perspective that serves diverse clients across the U.S. and Latin America.")}
                 </p>
               </motion.div>
             </div>
