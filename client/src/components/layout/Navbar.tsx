@@ -100,10 +100,10 @@ export default function Navbar() {
                 <>
                   <div className="flex items-center mr-3">
                     <div className="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 font-bold text-sm mr-2">
-                      {user.username.charAt(0).toUpperCase()}
+                      {(user.fullName ? user.fullName.charAt(0) : user.username.charAt(0)).toUpperCase()}
                     </div>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      {user.username}
+                      {user.fullName ? user.fullName.split(' ')[0] : user.username}
                     </span>
                   </div>
                   <Link href="/dashboard">
@@ -160,10 +160,10 @@ export default function Navbar() {
             <>
               <div className="flex items-center pl-3 pr-4 py-3 border-l-4 border-transparent bg-gray-50 dark:bg-gray-700">
                 <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 font-bold text-sm mr-2">
-                  {user.username.charAt(0).toUpperCase()}
+                  {(user.fullName ? user.fullName.charAt(0) : user.username.charAt(0)).toUpperCase()}
                 </div>
                 <span className="text-base font-medium text-gray-700 dark:text-gray-200">
-                  {user.username}
+                  {user.fullName ? user.fullName.split(' ')[0] : user.username}
                 </span>
               </div>
               <Link 
