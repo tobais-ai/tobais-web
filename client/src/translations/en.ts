@@ -164,7 +164,7 @@ export const enTranslations = {
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
     cookiePolicy: "Cookie Policy",
-    copyright: "© 2023 TOBAIS. All rights reserved.",
+    copyright: "© 2025 TOBAIS. All rights reserved.",
     language: "English"
   },
   ai: {
