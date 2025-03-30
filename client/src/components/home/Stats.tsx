@@ -13,29 +13,29 @@ export default function Stats() {
     {
       id: 1,
       icon: <Users className="w-10 h-10" />,
-      value: 2,
-      label: t("stats.clients"),
+      value: 3,
+      label: t("Clients"),
       suffix: ""
     },
     {
       id: 2,
       icon: <Briefcase className="w-10 h-10" />,
       value: 3,
-      label: t("stats.projects"),
+      label: t("Projects"),
       suffix: ""
     },
     {
       id: 3,
       icon: <Award className="w-10 h-10" />,
       value: 0,
-      label: t("stats.awards"),
+      label: t("Awards"),
       suffix: ""
     },
     {
       id: 4,
       icon: <Globe className="w-10 h-10" />,
       value: 3,
-      label: t("stats.countries"),
+      label: t("Countries"),
       suffix: ""
     }
   ];

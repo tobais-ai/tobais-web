@@ -15,7 +15,10 @@ export const esTranslations = {
   },
   team: {
     title: "Nuestro Equipo",
-    subtitle: "Conozca a los profesionales talentosos dedicados a ayudar a su negocio a tener éxito en el panorama digital"
+    subtitle: "Conozca a los profesionales talentosos dedicados a ayudar a su negocio a tener éxito en el panorama digital",
+    founderCeo: "Fundador & CEO",
+    mateoDescription: "Estratega digital con más de 10 años de experiencia ayudando a empresas a transformar su presencia digital.",
+    dianaDescription: "Diseñadora premiada especializada en identidad de marca y diseño UI/UX para plataformas digitales."
   },
   values: {
     title: "Nuestros Valores",
