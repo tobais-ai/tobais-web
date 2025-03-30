@@ -31,7 +31,7 @@ export default function Footer() {
               <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
                 <FaTwitter />
               </a>
-              <a href="https://www.instagram.com/tobais.official" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/tobais.official/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
                 <FaInstagram />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
