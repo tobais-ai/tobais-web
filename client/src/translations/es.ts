@@ -321,5 +321,12 @@ export const esTranslations = {
       description: "Colaboremos para crear una solución digital que ayude a su negocio a prosperar en el panorama competitivo actual.",
       button: "Comenzar"
     }
+  },
+  projects: {
+    title: "Proyectos Destacados",
+    subtitle: "Eche un vistazo a algunos de nuestros proyectos exitosos para clientes y los resultados que hemos entregado",
+    noProjects: "No hay proyectos disponibles en este momento. ¡Vuelva pronto!",
+    viewCase: "Ver Caso de Estudio",
+    viewAll: "Ver Todos los Proyectos"
   }
 };

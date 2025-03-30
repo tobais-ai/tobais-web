@@ -321,5 +321,12 @@ export const enTranslations = {
       description: "Let's collaborate to create a digital solution that helps your business thrive in today's competitive landscape.",
       button: "Get Started"
     }
+  },
+  projects: {
+    title: "Featured Projects",
+    subtitle: "Take a look at some of our successful client projects and the results we've delivered",
+    noProjects: "No projects available at the moment. Check back soon!",
+    viewCase: "View Case Study",
+    viewAll: "View All Projects"
   }
 };
