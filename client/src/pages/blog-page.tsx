@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { ArrowLeft } from "lucide-react";
 
 export default function BlogPage() {
   const [_, navigate] = useLocation();
@@ -75,10 +76,22 @@ export default function BlogPage() {
 
   return (
     <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold mb-2">{t("blog.title", "Blog")}</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-        {t("blog.subtitle", "Latest articles, insights, and updates from our team")}
-      </p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">{t("blog.title", "Blog")}</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            {t("blog.subtitle", "Latest articles, insights, and updates from our team")}
+          </p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={() => navigate("/")}
+          className="mt-4 md:mt-0 flex items-center"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {t("common.backToHome", "Back to Home")}
+        </Button>
+      </div>
       <Separator className="mb-8" />
       
       {blogPosts && blogPosts.length > 0 ? (
