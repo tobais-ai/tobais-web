@@ -46,11 +46,13 @@ export default function Navbar() {
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center">
-                <img 
-                  src={tobaisLogo} 
-                  alt="TOBAIS Logo" 
-                  className="h-9 mr-2" 
-                />
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-primary-500 mr-2">
+                  <img 
+                    src={tobaisLogo} 
+                    alt="TOBAIS Logo" 
+                    className="h-8 w-8 object-contain" 
+                  />
+                </div>
               </Link>
             </div>
             
