@@ -98,6 +98,14 @@ export default function Navbar() {
             <div className="hidden md:flex items-center ml-4">
               {user ? (
                 <>
+                  <div className="flex items-center mr-3">
+                    <div className="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 font-bold text-sm mr-2">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                      {user.username}
+                    </span>
+                  </div>
                   <Link href="/dashboard">
                     <Button variant="ghost" size="sm" className="mr-2">
                       {t("navigation.dashboard")}
@@ -150,6 +158,14 @@ export default function Navbar() {
           {/* Auth buttons (mobile) */}
           {user ? (
             <>
+              <div className="flex items-center pl-3 pr-4 py-3 border-l-4 border-transparent bg-gray-50 dark:bg-gray-700">
+                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 font-bold text-sm mr-2">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-base font-medium text-gray-700 dark:text-gray-200">
+                  {user.username}
+                </span>
+              </div>
               <Link 
                 href="/dashboard"
                 className="block pl-3 pr-4 py-2 border-l-4 border-transparent hover:bg-gray-50 dark:hover:bg-gray-700 text-base font-medium transition-colors"
