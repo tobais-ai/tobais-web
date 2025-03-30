@@ -360,5 +360,11 @@ export const esTranslations = {
     noProjects: "No hay proyectos disponibles en este momento. ¡Vuelva pronto!",
     viewCase: "Ver Caso de Estudio",
     viewAll: "Ver Todos los Proyectos"
+  },
+  stats: {
+    clients: "Clientes",
+    projects: "Proyectos",
+    awards: "Premios",
+    countries: "Países"
   }
 };

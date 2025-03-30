@@ -332,5 +332,11 @@ export const enTranslations = {
     noProjects: "No projects available at the moment. Check back soon!",
     viewCase: "View Case Study",
     viewAll: "View All Projects"
+  },
+  stats: {
+    clients: "Clients",
+    projects: "Projects",
+    awards: "Awards",
+    countries: "Countries"
   }
 };
