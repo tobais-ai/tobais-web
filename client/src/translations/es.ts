@@ -133,7 +133,7 @@ export const esTranslations = {
       email: "Correo Electrónico",
       phone: "Teléfono",
       locations: "Ubicaciones de Oficinas",
-      locationText: "Miami, FL (EE.UU.) & Bogotá (Colombia)",
+      locationText: "Charlotte, NC (EE.UU.) & Montevideo (Uruguay)",
       connect: "Conéctate Con Nosotros",
       schedule: {
         title: "Agenda una Consulta",
