@@ -19,6 +19,7 @@ export default function Footer() {
                   className="h-12 w-12 object-cover" 
                 />
               </div>
+              <div className="text-2xl font-['Poppins'] font-bold text-white">TOBAIS</div>
             </div>
             <p className="text-gray-400 mb-4">
               {t("footer.description")}
