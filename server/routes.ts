@@ -10,9 +10,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
   console.warn('Warning: Missing STRIPE_SECRET_KEY. Stripe payments will not work properly.');
 }
 
-const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2023-10-16",
-}) : null;
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -437,6 +435,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Stripe payment routes
   if (stripe) {
+    // Test endpoint for $1.00 payment (only for testing)
+    app.post("/api/test-payment", async (req, res, next) => {
+      try {
+        const testAmount = 1.00; // $1.00 USD for testing
+        
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: Math.round(testAmount * 100), // Convert to cents
+          currency: "usd",
+          metadata: {
+            test: "true",
+            purpose: "API validation"
+          }
+        });
+        
+        res.json({ 
+          clientSecret: paymentIntent.client_secret,
+          amount: testAmount,
+          message: "Test payment intent created successfully" 
+        });
+      } catch (error: any) {
+        res.status(500).json({ message: "Error creating test payment intent: " + error.message });
+      }
+    });
+    
     // Create payment intent for service purchase
     app.post("/api/create-payment-intent", async (req, res, next) => {
       try {
