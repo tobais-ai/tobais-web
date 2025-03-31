@@ -30,6 +30,11 @@ export const paypalClient = new paypalSdk.core.PayPalHttpClient(environment);
 
 // Función para crear una orden de PayPal
 export async function createPayPalOrder(amount: number, currency: string = 'USD') {
+  // Verificar si PayPal está configurado correctamente
+  if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
+    throw new Error('PayPal credentials are not configured correctly. Please check PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET');
+  }
+
   const request = new PayPalOrdersCreateRequest();
   request.prefer('return=representation');
   request.requestBody({
@@ -47,8 +52,14 @@ export async function createPayPalOrder(amount: number, currency: string = 'USD'
   try {
     const order = await paypalClient.execute(request);
     return order.result;
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error creating PayPal order:', err);
+    
+    // Mejorar el mensaje de error para facilitar la depuración
+    if (err.statusCode === 401) {
+      throw new Error('PayPal authentication failed. Please check your credentials (PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET)');
+    }
+    
     throw err;
   }
 }
@@ -61,7 +72,7 @@ export async function capturePayPalOrder(orderId: string) {
   try {
     const capture = await paypalClient.execute(request);
     return capture.result;
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error capturing PayPal payment:', err);
     throw err;
   }

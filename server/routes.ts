@@ -533,6 +533,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Authentication required" });
       }
       
+      // Verificar que las credenciales de PayPal estén configuradas
+      if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
+        return res.status(500).json({ 
+          message: "PayPal configuration error: Missing credentials", 
+          details: "Please provide valid PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET"
+        });
+      }
+      
       const { amount } = req.body;
       
       if (!amount || amount <= 0) {
@@ -542,7 +550,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const order = await createPayPalOrder(amount);
       res.json(order);
     } catch (error: any) {
-      res.status(500).json({ message: "Error creating PayPal order: " + error.message });
+      console.error("PayPal API error:", error);
+      
+      // Mejorar el mensaje de error para facilitar la depuración
+      let statusCode = 500;
+      let errorMessage = "Error creating PayPal order: " + error.message;
+      
+      if (error.statusCode === 401) {
+        statusCode = 401;
+        errorMessage = "PayPal authentication failed. Please check your PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET.";
+      }
+      
+      res.status(statusCode).json({ message: errorMessage });
     }
   });
   
