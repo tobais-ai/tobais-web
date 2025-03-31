@@ -39,7 +39,7 @@ export const esTranslations = {
     title: "Nuestros Servicios",
     subtitle: "Ayudamos a las empresas a transformar su presencia digital con soluciones integrales.",
     buyNow: "Comprar Ahora",
-    contactUs: "Hablemos",
+    contactUs: "Comenzar",
     price: "desde",
     webDesign: {
       title: "Diseño Web",

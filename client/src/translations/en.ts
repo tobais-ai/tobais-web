@@ -39,7 +39,7 @@ export const enTranslations = {
     title: "Our Services",
     subtitle: "Helping businesses transform their digital presence with comprehensive solutions.",
     buyNow: "Buy Now",
-    contactUs: "Let's Chat",
+    contactUs: "Get Started",
     price: "starting at",
     webDesign: {
       title: "Web Design",
