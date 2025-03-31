@@ -384,8 +384,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Mock invoice API - will be replaced with actual database implementation
+  app.get("/api/user/invoices", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      // Mock data - in production, this would fetch from the database
+      res.json([
+        {
+          id: 1,
+          description: "Web Design Services - Monthly Maintenance",
+          amount: 99.00,
+          status: 'pending',
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          serviceType: "Maintenance",
+          invoiceNumber: "INV-2025-001"
+        },
+        {
+          id: 2,
+          description: "Social Media Management - Mar 2025",
+          amount: 149.00,
+          status: 'pending',
+          dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          serviceType: "Marketing",
+          invoiceNumber: "INV-2025-002"
+        },
+        {
+          id: 3,
+          description: "SEO Optimization - Q1 2025",
+          amount: 299.00,
+          status: 'overdue',
+          dueDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          serviceType: "SEO",
+          invoiceNumber: "INV-2025-003"
+        },
+        {
+          id: 4,
+          description: "Content Writing - Blog Posts Feb 2025",
+          amount: 199.00,
+          status: 'paid',
+          dueDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          serviceType: "Content",
+          invoiceNumber: "INV-2025-004"
+        }
+      ]);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   // Stripe payment routes
   if (stripe) {
+    // Create payment intent for service purchase
     app.post("/api/create-payment-intent", async (req, res, next) => {
       try {
         if (!req.isAuthenticated()) {
@@ -404,6 +456,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
           metadata: {
             userId: req.user?.id.toString(),
             serviceId: serviceId?.toString() || "",
+          }
+        });
+        
+        res.json({ clientSecret: paymentIntent.client_secret });
+      } catch (error: any) {
+        res.status(500).json({ message: "Error creating payment intent: " + error.message });
+      }
+    });
+    
+    // Create payment intent for invoice payments
+    app.post("/api/create-invoice-payment-intent", async (req, res, next) => {
+      try {
+        if (!req.isAuthenticated()) {
+          return res.status(401).json({ message: "Authentication required" });
+        }
+        
+        const { amount, invoiceIds } = req.body;
+        
+        if (!amount || amount <= 0) {
+          return res.status(400).json({ message: "Valid amount is required" });
+        }
+        
+        if (!invoiceIds || !Array.isArray(invoiceIds) || invoiceIds.length === 0) {
+          return res.status(400).json({ message: "Valid invoice IDs are required" });
+        }
+        
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: Math.round(amount * 100), // Convert to cents
+          currency: "usd",
+          metadata: {
+            userId: req.user?.id.toString(),
+            invoiceIds: JSON.stringify(invoiceIds),
+            paymentType: "invoice"
           }
         });
         

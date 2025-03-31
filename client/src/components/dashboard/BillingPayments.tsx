@@ -92,12 +92,32 @@ export default function BillingPayments() {
     ?.filter(invoice => selectedInvoices.includes(invoice.id))
     .reduce((sum, invoice) => sum + invoice.amount, 0) || 0;
   
-  const handlePaySelected = () => {
+  const handlePaySelected = async () => {
     if (selectedInvoices.length === 0) return;
     
-    // In a real implementation, we would create a payment intent here
-    // and pass the invoice IDs to the checkout page
-    setLocation(`/checkout?invoiceIds=${selectedInvoices.join(',')}`);
+    const selectedInvoiceObjects = invoices?.filter(invoice => selectedInvoices.includes(invoice.id)) || [];
+    const totalAmount = selectedInvoiceObjects.reduce((sum, invoice) => sum + invoice.amount, 0);
+    
+    try {
+      // Create a payment intent for the selected invoices
+      const response = await fetch('/api/create-invoice-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          invoiceIds: selectedInvoices
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create payment intent');
+      }
+      
+      // Redirect to checkout page with query parameters
+      setLocation(`/checkout?type=invoice&amount=${totalAmount}&invoiceIds=${selectedInvoices.join(',')}`);
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+    }
   };
   
   const getStatusBadge = (status: string) => {

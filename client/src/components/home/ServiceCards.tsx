@@ -139,10 +139,10 @@ export default function ServiceCards() {
                       </div>
                       
                       <a 
-                        href={`/checkout?serviceId=${service.id}`}
+                        href="/contact"
                         className="block w-full bg-primary-600 hover:bg-primary-700 text-center py-2 px-4 rounded-md transition-colors duration-300"
                       >
-                        {t("services.buyNow")}
+                        {t("services.contactUs")}
                       </a>
                     </div>
                   </div>

@@ -4,10 +4,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency } from "@/lib/utils";
 
 interface OrderSummaryProps {
-  service: ServiceType;
+  service: ServiceType | undefined;
 }
 
 export default function OrderSummary({ service }: OrderSummaryProps) {
+  // Return placeholder if service is undefined
+  if (!service) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          Loading...
+        </h2>
+      </div>
+    );
+  }
   const { t, language } = useLanguage();
   
   // Display service name and description based on language

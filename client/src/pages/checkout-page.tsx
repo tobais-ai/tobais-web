@@ -26,27 +26,50 @@ export default function CheckoutPage() {
   const { t } = useLanguage();
   const [clientSecret, setClientSecret] = useState("");
   const [serviceId, setServiceId] = useState<number | null>(null);
+  const [invoiceIds, setInvoiceIds] = useState<number[]>([]);
+  const [checkoutType, setCheckoutType] = useState<'service' | 'invoice'>('service');
+  const [amount, setAmount] = useState<number | null>(null);
 
-  // Extract serviceId from URL query parameters
+  // Extract parameters from URL query parameters
   useEffect(() => {
     const params = new URLSearchParams(location.split("?")[1]);
-    const id = params.get("serviceId");
-    if (id) {
-      setServiceId(parseInt(id, 10));
+    
+    // Check checkout type
+    const type = params.get("type");
+    if (type === "invoice") {
+      setCheckoutType('invoice');
+      
+      // Handle invoice checkout
+      const invoiceIdsParam = params.get("invoiceIds");
+      const amountParam = params.get("amount");
+      
+      if (invoiceIdsParam) {
+        setInvoiceIds(invoiceIdsParam.split(',').map(id => parseInt(id, 10)));
+      }
+      
+      if (amountParam) {
+        setAmount(parseFloat(amountParam));
+      }
+    } else {
+      // Handle service checkout
+      const id = params.get("serviceId");
+      if (id) {
+        setServiceId(parseInt(id, 10));
+      }
     }
   }, [location]);
 
-  // Fetch service details
+  // Fetch service details if it's a service checkout
   const { data: service, isLoading: isLoadingService } = useQuery<ServiceType>({
     queryKey: ["/api/services", serviceId],
     queryFn: getQueryFn({ on401: "throw" }),
-    enabled: !!serviceId,
+    enabled: !!serviceId && checkoutType === 'service',
   });
 
-  // Create payment intent when service is selected
+  // Create payment intent for either service or invoices
   useEffect(() => {
-    if (service) {
-      // Create PaymentIntent as soon as the page loads with the service price
+    if (checkoutType === 'service' && service) {
+      // Create PaymentIntent for service purchase
       fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,11 +89,35 @@ export default function CheckoutPage() {
         .catch((err) => {
           console.error("Error creating payment intent:", err);
         });
+    } else if (checkoutType === 'invoice' && invoiceIds.length > 0 && amount) {
+      // Create PaymentIntent for invoice payment
+      fetch("/api/create-invoice-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          amount: amount,
+          invoiceIds: invoiceIds
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.clientSecret) {
+            setClientSecret(data.clientSecret);
+          } else if (data.message) {
+            console.error("Error:", data.message);
+          }
+        })
+        .catch((err) => {
+          console.error("Error creating payment intent:", err);
+        });
     }
-  }, [service]);
+  }, [service, checkoutType, invoiceIds, amount]);
 
-  // Loading state
-  if (isLoadingService || !service) {
+  // Loading state for services
+  const isLoading = (checkoutType === 'service' && (isLoadingService || !service)) || 
+                    (checkoutType === 'invoice' && (!amount || invoiceIds.length === 0));
+                    
+  if (isLoading) {
     return (
       <>
         <Navbar />
@@ -87,8 +134,9 @@ export default function CheckoutPage() {
     );
   }
 
-  // No service found
-  if (!serviceId || !service) {
+  // No service/invoice found
+  if ((checkoutType === 'service' && (!serviceId || !service)) || 
+      (checkoutType === 'invoice' && invoiceIds.length === 0)) {
     return (
       <>
         <Navbar />
@@ -98,16 +146,22 @@ export default function CheckoutPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              {t("checkout.noServiceSelected")}
+              {checkoutType === 'service' 
+                ? t("checkout.noServiceSelected")
+                : t("checkout.noInvoicesSelected")}
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              {t("checkout.pleaseSelectService")}
+              {checkoutType === 'service'
+                ? t("checkout.pleaseSelectService")
+                : t("checkout.pleaseSelectInvoices")}
             </p>
             <a 
-              href="/services" 
+              href={checkoutType === 'service' ? "/services" : "/dashboard"} 
               className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
             >
-              {t("checkout.browseServices")}
+              {checkoutType === 'service'
+                ? t("checkout.browseServices")
+                : t("checkout.backToDashboard")}
             </a>
           </div>
         </div>
@@ -115,6 +169,46 @@ export default function CheckoutPage() {
       </>
     );
   }
+
+  // Create Invoice Summary component for when checkoutType is 'invoice'
+  const InvoiceSummary = () => {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            {t("checkout.invoiceSummary")}
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
+            {t("checkout.invoiceSummaryDesc").replace('{count}', invoiceIds.length.toString())}
+          </p>
+        </div>
+        
+        <div className="p-6">
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">
+                {t("checkout.invoiceCount")}
+              </span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                {invoiceIds.length}
+              </span>
+            </div>
+            
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex justify-between">
+                <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {t("checkout.total")}
+                </span>
+                <span className="text-lg font-bold text-primary-600 dark:text-primary-500">
+                  ${amount?.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -128,7 +222,11 @@ export default function CheckoutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Order Summary - 2 columns */}
             <div className="lg:col-span-2">
-              <OrderSummary service={service} />
+              {checkoutType === 'service' ? (
+                <OrderSummary service={service} />
+              ) : (
+                <InvoiceSummary />
+              )}
             </div>
 
             {/* Payment Form - 3 columns */}
