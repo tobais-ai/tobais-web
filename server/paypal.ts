@@ -8,8 +8,16 @@ const paypalSdk = require('@paypal/checkout-server-sdk');
 const clientId = process.env.PAYPAL_CLIENT_ID;
 const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
+// Verificar y validar credenciales de PayPal
 if (!clientId || !clientSecret) {
   console.warn('Warning: Missing PayPal credentials. PayPal payments will not work properly.');
+  
+  // No lanzar error para permitir que la aplicación continúe funcionando
+  // pero PayPal no estará disponible
+}
+
+if (clientId && clientSecret) {
+  console.log('PayPal configuration initialized with client ID:', clientId.substring(0, 5) + '...');
 }
 
 // Determine el entorno según las variables de entorno
@@ -66,9 +74,11 @@ class PayPalOrdersCreateRequest {
 
   path = '/v2/checkout/orders';
   method = 'POST';
+  
   requestBody(body: any) {
     this.body = body;
   }
+  
   prefer(value: string) {
     this.preferHeader = value;
   }
@@ -87,13 +97,14 @@ class PayPalOrdersCreateRequest {
 class PayPalOrdersCaptureRequest {
   path: string;
   method = 'POST';
-  requestBody(body: any) {
-    this.body = body;
-  }
   body: any;
 
   constructor(orderId: string) {
     this.path = `/v2/checkout/orders/${orderId}/capture`;
+  }
+  
+  requestBody(body: any) {
+    this.body = body;
   }
 
   headers() {
