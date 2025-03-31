@@ -369,5 +369,24 @@ export const esTranslations = {
     projects: "Proyectos",
     awards: "Premios",
     countries: "Países"
+  },
+  billing: {
+    title: "Facturación y Pagos",
+    description: "Administre sus facturas y pagos de suscripción",
+    pendingInvoices: "Facturas Pendientes",
+    paymentHistory: "Historial de Pagos",
+    dueDate: "Fecha de Vencimiento",
+    pending: "Pendiente",
+    paid: "Pagado",
+    overdue: "Vencido",
+    allPaid: "¡Todo Pagado!",
+    noPendingInvoices: "No tiene facturas pendientes en este momento.",
+    noPaymentHistory: "Sin Historial de Pagos",
+    noCompletedPayments: "Aún no ha realizado ningún pago.",
+    selectedInvoices: "Facturas Seleccionadas: {count}",
+    payNow: "Pagar Ahora",
+    paymentMethods: "Métodos de Pago",
+    securePaymentMessage: "Todos los pagos se procesan de forma segura a través de nuestro proveedor de pagos.",
+    paidOn: "Pagado el"
   }
 };

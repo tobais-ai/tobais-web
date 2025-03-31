@@ -338,5 +338,24 @@ export const enTranslations = {
     projects: "Projects",
     awards: "Awards",
     countries: "Countries"
+  },
+  billing: {
+    title: "Billing & Payments",
+    description: "Manage your invoices and subscription payments",
+    pendingInvoices: "Pending Invoices",
+    paymentHistory: "Payment History",
+    dueDate: "Due Date",
+    pending: "Pending",
+    paid: "Paid",
+    overdue: "Overdue",
+    allPaid: "All Paid!",
+    noPendingInvoices: "You have no pending invoices at this time.",
+    noPaymentHistory: "No Payment History",
+    noCompletedPayments: "You haven't made any payments yet.",
+    selectedInvoices: "Selected Invoices: {count}",
+    payNow: "Pay Now",
+    paymentMethods: "Payment Methods",
+    securePaymentMessage: "All payments are processed securely through our payment provider.",
+    paidOn: "Paid on"
   }
 };
