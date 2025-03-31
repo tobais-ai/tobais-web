@@ -5,7 +5,7 @@ import { setupAuth } from "./auth";
 import { insertContactSchema, insertProjectSchema, insertTestimonialSchema, insertSocialMediaSchema, insertBlogPostSchema } from "@shared/schema";
 import { generateSocialMediaContent, generateMultiPlatformContent, generateContentRecommendations } from "./openai";
 import Stripe from "stripe";
-import { createPayPalOrder, capturePayPalOrder } from "./paypal";
+import { createPayPalOrder, capturePayPalOrder, isPayPalInitialized } from "./paypal";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   console.warn('Warning: Missing STRIPE_SECRET_KEY. Stripe payments will not work properly.');
@@ -527,17 +527,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   // PayPal payment routes
+  
+  // Endpoint para verificar si PayPal está configurado correctamente
+  app.get("/api/check-paypal-status", async (_req, res) => {
+    const isInitialized = isPayPalInitialized();
+    res.json({ 
+      initialized: isInitialized,
+      clientIdConfigured: !!process.env.PAYPAL_CLIENT_ID,
+      message: isInitialized 
+        ? "PayPal is properly configured and ready to use" 
+        : "PayPal is not initialized or credentials are invalid"
+    });
+  });
   app.post("/api/create-paypal-order", async (req, res, next) => {
     try {
       if (!req.isAuthenticated() && !req.body.isTestPayment) {
         return res.status(401).json({ message: "Authentication required" });
       }
       
-      // Verificar que las credenciales de PayPal estén configuradas
-      if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-        return res.status(500).json({ 
-          message: "PayPal configuration error: Missing credentials", 
-          details: "Please provide valid PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET"
+      // Verificar que PayPal esté inicializado
+      if (!isPayPalInitialized()) {
+        return res.status(503).json({ 
+          message: "PayPal service unavailable", 
+          details: "PayPal is not properly initialized or credentials are invalid",
+          code: "PAYPAL_NOT_INITIALIZED"
         });
       }
       
@@ -558,18 +571,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Mejorar el mensaje de error para facilitar la depuración
       let statusCode = 500;
       let errorMessage = "Error creating PayPal order: " + error.message;
+      let errorCode = "UNKNOWN_ERROR";
       
-      if (error.statusCode === 401) {
+      if (error.message && error.message.includes("authentication failed")) {
         statusCode = 401;
         errorMessage = "PayPal authentication failed. Please check your PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET.";
+        errorCode = "PAYPAL_AUTH_FAILED";
       }
       
-      res.status(statusCode).json({ message: errorMessage });
+      res.status(statusCode).json({ 
+        message: errorMessage,
+        code: errorCode
+      });
     }
   });
   
   app.post("/api/capture-paypal-order", async (req, res, next) => {
     try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      // Verificar que PayPal esté inicializado
+      if (!isPayPalInitialized()) {
+        return res.status(503).json({ 
+          message: "PayPal service unavailable", 
+          details: "PayPal is not properly initialized or credentials are invalid",
+          code: "PAYPAL_NOT_INITIALIZED"
+        });
+      }
+      
       const { orderId } = req.body;
       
       if (!orderId) {
@@ -586,13 +617,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Mejorar el mensaje de error para facilitar la depuración
       let statusCode = 500;
       let errorMessage = "Error capturing PayPal order: " + error.message;
+      let errorCode = "UNKNOWN_ERROR";
       
-      if (error.statusCode === 401) {
+      if (error.message && error.message.includes("authentication failed")) {
         statusCode = 401;
         errorMessage = "PayPal authentication failed. Please check your credentials.";
+        errorCode = "PAYPAL_AUTH_FAILED";
       }
       
-      res.status(statusCode).json({ message: errorMessage });
+      res.status(statusCode).json({ 
+        message: errorMessage,
+        code: errorCode
+      });
     }
   });
 

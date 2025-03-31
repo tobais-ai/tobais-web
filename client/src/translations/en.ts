@@ -286,6 +286,7 @@ export const enTranslations = {
     paymentCancelledDescription: "You have cancelled the payment process.",
     stripeNotInitialized: "Payment processor not initialized. Please try again later.",
     unexpectedState: "Unexpected Payment State",
+    unexpectedError: "An unexpected error occurred.",
     contactSupport: "Please contact support for assistance.",
     tryAgain: "Please try again or use a different payment method.",
     thankYou: "Thank you for your payment!",
@@ -315,7 +316,26 @@ export const enTranslations = {
     paypalMissingConfig: "PayPal configuration is missing. Please contact support.",
     configurationError: "Configuration Error",
     errorCreatingOrder: "Error creating order",
-    transactionCompleted: "Your transaction has been completed successfully."
+    transactionCompleted: "Your transaction has been completed successfully.",
+    paypalAuthError: "PayPal authentication error. The system cannot connect to PayPal at this time.",
+    paypalServiceUnavailable: "PayPal service is currently unavailable. Please try again later or contact support.",
+    contactAdministrator: "Please contact the administrator to resolve this issue.",
+    verifyingPayPal: "Verifying PayPal configuration...",
+    retryVerification: "Retry verification"
+  },
+  common: {
+    retry: "Retry",
+    cancel: "Cancel",
+    confirm: "Confirm",
+    back: "Back",
+    next: "Next",
+    save: "Save",
+    delete: "Delete",
+    edit: "Edit",
+    view: "View",
+    loading: "Loading...",
+    searching: "Searching...",
+    noResults: "No results found"
   },
   paymentSuccess: {
     title: "Payment Successful!",
