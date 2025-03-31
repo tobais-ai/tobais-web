@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CheckoutForm from "@/components/payment/CheckoutForm";
@@ -11,14 +9,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { ServiceType } from "@shared/schema";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
-import { Loader2 } from "lucide-react";
+import { Loader2, CreditCard } from "lucide-react";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 
-// This is your test publishable API key.
-// In production, use your live key from environment variables
-const stripePromise = loadStripe(
-  import.meta.env.VITE_STRIPE_PUBLIC_KEY || 
-  "pk_test_51OdXYBIultrI0oDpYLTcr5L0d3g5Mws2sCCnAX2LvJQTSGWH8d6aNkQynYHlVNYfG5iNIZQR4yyyaY5XEkrQRLz600UxPyDf0F"
-);
+// For mockup, we don't need a real Stripe key
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+  : null;
 
 export default function CheckoutPage() {
   const [location] = useLocation();
@@ -66,52 +64,40 @@ export default function CheckoutPage() {
     enabled: !!serviceId && checkoutType === 'service',
   });
 
-  // Create payment intent for either service or invoices
+  // Initialize payment intent for checkout
   useEffect(() => {
-    if (checkoutType === 'service' && service) {
-      // Create PaymentIntent for service purchase
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          amount: service.price,
-          serviceId: service.id 
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          } else if (data.message) {
-            console.error("Error:", data.message);
-          }
+    if ((checkoutType === 'service' && service) || 
+        (checkoutType === 'invoice' && invoiceIds.length > 0 && amount)) {
+      
+      // Simulate payment intent creation
+      // In production, this would be a real API call to create a payment intent
+      if (checkoutType === 'invoice') {
+        // Fetch the payment intent for invoices
+        fetch('/api/create-invoice-payment-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            invoiceIds, 
+            amount 
+          }),
         })
-        .catch((err) => {
-          console.error("Error creating payment intent:", err);
-        });
-    } else if (checkoutType === 'invoice' && invoiceIds.length > 0 && amount) {
-      // Create PaymentIntent for invoice payment
-      fetch("/api/create-invoice-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          amount: amount,
-          invoiceIds: invoiceIds
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          } else if (data.message) {
-            console.error("Error:", data.message);
-          }
-        })
-        .catch((err) => {
-          console.error("Error creating payment intent:", err);
-        });
+          .then(res => res.json())
+          .then(data => {
+            setClientSecret(data.clientSecret || 'mock_client_secret_123');
+          })
+          .catch(err => {
+            console.error('Error creating payment intent:', err);
+            // Use mock client secret for mockup
+            setClientSecret('mock_client_secret_123');
+          });
+      } else {
+        // For service checkouts, use a fake client secret
+        setClientSecret('mock_client_secret_456');
+      }
     }
-  }, [service, checkoutType, invoiceIds, amount]);
+  }, [service, invoiceIds, amount, checkoutType]);
 
   // Loading state for services
   const isLoading = (checkoutType === 'service' && (isLoadingService || !service)) || 
@@ -210,6 +196,40 @@ export default function CheckoutPage() {
     );
   };
 
+  // Waiting for client secret before rendering payment form
+  const isWaitingForClientSecret = !clientSecret && (
+    (checkoutType === 'service' && service) || 
+    (checkoutType === 'invoice' && invoiceIds.length > 0)
+  );
+
+  if (isWaitingForClientSecret) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary-600 mx-auto mb-4" />
+            <h2 className="text-xl font-medium text-gray-900 dark:text-white">
+              {t("checkout.loadingPayment")}
+            </h2>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Options for Stripe Elements
+  const options: StripeElementsOptions = {
+    clientSecret,
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#6366f1',
+      },
+    },
+  };
+
   return (
     <>
       <Navbar />
@@ -236,18 +256,35 @@ export default function CheckoutPage() {
                   {t("checkout.paymentInformation")}
                 </h2>
 
-                {clientSecret ? (
-                  <Elements
-                    stripe={stripePromise}
-                    options={{ clientSecret, appearance: { theme: 'stripe' } }}
-                  >
-                    <CheckoutForm />
-                  </Elements>
-                ) : (
-                  <div className="flex justify-center py-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
+                    <div className="flex items-center">
+                      <CreditCard className="h-5 w-5 text-primary-600 dark:text-primary-500 mr-2" />
+                      <span className="font-medium">{t("checkout.payWithCard")}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <img 
+                        src="https://cdn.jsdelivr.net/gh/creativetimofficial/public-assets@master/soft-ui-design-system/assets/img/logos/mastercard.png" 
+                        alt="mastercard" 
+                        className="h-8" 
+                      />
+                      <img 
+                        src="https://cdn.jsdelivr.net/gh/creativetimofficial/public-assets@master/soft-ui-design-system/assets/img/logos/visa.png" 
+                        alt="visa" 
+                        className="h-8" 
+                      />
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Conditionally wrap with Elements provider if Stripe is available */}
+                  {stripePromise ? (
+                    <Elements stripe={stripePromise} options={options}>
+                      <CheckoutForm />
+                    </Elements>
+                  ) : (
+                    <CheckoutForm />
+                  )}
+                </div>
               </div>
             </div>
           </div>
