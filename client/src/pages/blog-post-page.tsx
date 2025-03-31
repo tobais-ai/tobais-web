@@ -23,8 +23,8 @@ export default function BlogPostPage() {
   const [location] = useLocation();
   const { language, t } = useLanguage();
   
-  // Get slug from the URL path
-  const slug = location.split("/").pop();
+  // Get slug from the URL path (fix: ensure location is treated as string)
+  const slug = typeof location === 'string' ? location.split("/").pop() : '';
   
   const { 
     data: post, 
@@ -141,7 +141,9 @@ export default function BlogPostPage() {
           <div className="prose prose-lg dark:prose-invert max-w-none">
             {content?.split('\n\n').map((paragraph, index) => {
               if (paragraph.startsWith('#')) {
-                const level = paragraph.match(/^#+/)?.[0]?.length || 1;
+                // Fix: ensure match results are checked properly
+                const matchResult = paragraph.match(/^#+/);
+                const level = matchResult && matchResult[0] ? matchResult[0].length : 1;
                 const text = paragraph.replace(/^#+\s/, '');
                 
                 switch (level) {
@@ -165,7 +167,9 @@ export default function BlogPostPage() {
                 );
               }
               
-              if (paragraph.match(/^\d+\./)) {
+              // Fix: safely check match result
+              const isOrderedList = paragraph.match(/^\d+\./) !== null;
+              if (isOrderedList) {
                 const items = paragraph.split('\n').map(item => item.replace(/^\d+\.\s/, ''));
                 return (
                   <ol key={index} className="list-decimal pl-6 my-4">

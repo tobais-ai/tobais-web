@@ -122,7 +122,8 @@ export default function CheckoutForm() {
   const formatCardNumber = (value: string) => {
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     const matches = v.match(/\d{4,16}/g);
-    const match = matches && matches[0] || '';
+    // Fix: safely check if matches exists and has items before accessing
+    const match = matches && matches.length > 0 ? matches[0] : '';
     const parts = [];
 
     for (let i = 0, len = match.length; i < len; i += 4) {

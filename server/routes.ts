@@ -531,11 +531,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Endpoint para verificar si PayPal está configurado correctamente
   app.get("/api/check-paypal-status", async (_req, res) => {
     const isInitialized = isPayPalInitialized();
+    // Forzamos siempre el entorno LIVE para credenciales de producción
+    const isLiveEnvironment = true; // Siempre LIVE/PRODUCTION
+    
+    // Determine API endpoint based on environment
+    const apiEndpoint = 'https://api-m.paypal.com'; // Siempre API de producción
+    
+    console.log('Checking PayPal configuration status:');
+    console.log('- Initialized:', isInitialized);
+    console.log('- Environment: LIVE/PRODUCTION (FORCED)');
+    console.log('- API Endpoint:', apiEndpoint);
+    console.log('- Client ID Configured:', !!process.env.PAYPAL_CLIENT_ID);
+    console.log('- Client Secret Configured:', !!process.env.PAYPAL_CLIENT_SECRET);
+    
     res.json({ 
       initialized: isInitialized,
       clientIdConfigured: !!process.env.PAYPAL_CLIENT_ID,
+      clientSecretConfigured: !!process.env.PAYPAL_CLIENT_SECRET,
+      environment: 'live',
+      apiEndpoint: apiEndpoint,
       message: isInitialized 
-        ? "PayPal is properly configured and ready to use" 
+        ? `PayPal is properly configured and ready to use in LIVE mode` 
         : "PayPal is not initialized or credentials are invalid"
     });
   });

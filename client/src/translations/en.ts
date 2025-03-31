@@ -321,7 +321,11 @@ export const enTranslations = {
     paypalServiceUnavailable: "PayPal service is currently unavailable. Please try again later or contact support.",
     contactAdministrator: "Please contact the administrator to resolve this issue.",
     verifyingPayPal: "Verifying PayPal configuration...",
-    retryVerification: "Retry verification"
+    retryVerification: "Retry verification",
+    credentialsCheckFailed: "PayPal credentials check failed. Please check the following:",
+    checkClientIdSecret: "Ensure both Client ID and Secret are correctly entered",
+    ensureEnvironmentMode: "Make sure you're using the correct environment (Sandbox/Live)",
+    tryRegeneratingCredentials: "Try generating new API credentials in your PayPal developer account"
   },
   common: {
     retry: "Retry",
