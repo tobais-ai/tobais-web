@@ -185,7 +185,7 @@ export default function BillingPayments() {
   const options = clientSecret ? {
     clientSecret,
     appearance: {
-      theme: 'stripe',
+      theme: 'stripe' as const,
       variables: {
         colorPrimary: '#6366f1',
       },

@@ -5,9 +5,14 @@ import { setupAuth } from "./auth";
 import { insertContactSchema, insertProjectSchema, insertTestimonialSchema, insertSocialMediaSchema, insertBlogPostSchema } from "@shared/schema";
 import { generateSocialMediaContent, generateMultiPlatformContent, generateContentRecommendations } from "./openai";
 import Stripe from "stripe";
+import { createPayPalOrder, capturePayPalOrder } from "./paypal";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   console.warn('Warning: Missing STRIPE_SECRET_KEY. Stripe payments will not work properly.');
+}
+
+if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
+  console.warn('Warning: Missing PayPal credentials. PayPal payments will not work properly.');
 }
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
@@ -520,6 +525,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
   }
+
+  // PayPal payment routes
+  app.post("/api/create-paypal-order", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated() && !req.body.isTestPayment) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const { amount } = req.body;
+      
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ message: "Valid amount is required" });
+      }
+      
+      const order = await createPayPalOrder(amount);
+      res.json(order);
+    } catch (error: any) {
+      res.status(500).json({ message: "Error creating PayPal order: " + error.message });
+    }
+  });
+  
+  app.post("/api/capture-paypal-order", async (req, res, next) => {
+    try {
+      const { orderId } = req.body;
+      
+      if (!orderId) {
+        return res.status(400).json({ message: "Order ID is required" });
+      }
+      
+      const captureData = await capturePayPalOrder(orderId);
+      res.json(captureData);
+    } catch (error: any) {
+      res.status(500).json({ message: "Error capturing PayPal order: " + error.message });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
