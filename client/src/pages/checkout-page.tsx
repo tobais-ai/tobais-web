@@ -13,10 +13,12 @@ import { Loader2, CreditCard } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 
-// For mockup, we don't need a real Stripe key
-const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
-  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
-  : null;
+// Initialize Stripe with the public key
+if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+  console.error('Missing Stripe public key. Payments will not work correctly.');
+}
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export default function CheckoutPage() {
   const [location] = useLocation();
@@ -69,10 +71,10 @@ export default function CheckoutPage() {
     if ((checkoutType === 'service' && service) || 
         (checkoutType === 'invoice' && invoiceIds.length > 0 && amount)) {
       
-      // Simulate payment intent creation
-      // In production, this would be a real API call to create a payment intent
+      setClientSecret("");
+      
       if (checkoutType === 'invoice') {
-        // Fetch the payment intent for invoices
+        // Create real payment intent for invoices
         fetch('/api/create-invoice-payment-intent', {
           method: 'POST',
           headers: {
@@ -83,18 +85,50 @@ export default function CheckoutPage() {
             amount 
           }),
         })
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
           .then(data => {
-            setClientSecret(data.clientSecret || 'mock_client_secret_123');
+            if (data.clientSecret) {
+              setClientSecret(data.clientSecret);
+            } else {
+              console.error('No client secret returned from payment intent API');
+            }
           })
           .catch(err => {
             console.error('Error creating payment intent:', err);
-            // Use mock client secret for mockup
-            setClientSecret('mock_client_secret_123');
           });
-      } else {
-        // For service checkouts, use a fake client secret
-        setClientSecret('mock_client_secret_456');
+      } else if (service) {
+        // Create real payment intent for service purchase
+        fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            amount: service.price,
+            serviceId: service.id
+          }),
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (data.clientSecret) {
+              setClientSecret(data.clientSecret);
+            } else {
+              console.error('No client secret returned from payment intent API');
+            }
+          })
+          .catch(err => {
+            console.error('Error creating payment intent:', err);
+          });
       }
     }
   }, [service, invoiceIds, amount, checkoutType]);

@@ -30,39 +30,57 @@ export default function CheckoutForm() {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
 
-  // Use custom card form instead of Stripe's element when Stripe is not available
-  const [useCustomForm, setUseCustomForm] = useState(!stripe);
+  // Only use custom form when Stripe API is completely unavailable
+  const [useCustomForm] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (stripe && elements && !useCustomForm) {
-      // Real Stripe integration
-      setIsProcessing(true);
+    if (!stripe || !elements) {
+      console.error('Stripe has not loaded yet');
+      toast({
+        title: t("checkout.paymentError"),
+        description: t("checkout.stripeNotInitialized"),
+        variant: "destructive",
+      });
+      return;
+    }
 
-      try {
-        const { error, paymentIntent } = await stripe.confirmPayment({
-          elements,
-          confirmParams: {
-            return_url: window.location.origin + "/payment-success",
-          },
-          redirect: "if_required"
+    setIsProcessing(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin + "/payment-success",
+        },
+        redirect: "if_required"
+      });
+
+      if (error) {
+        console.error('Payment error:', error);
+        toast({
+          title: t("checkout.paymentFailed"),
+          description: error.message || t("checkout.tryAgain"),
+          variant: "destructive",
         });
-
-        if (error) {
+      } else if (paymentIntent && paymentIntent.status === "succeeded") {
+        toast({
+          title: t("checkout.paymentSuccessful"),
+          description: t("checkout.thankYou"),
+        });
+        
+        // Redirect to success page
+        setLocation("/payment-success");
+      } else {
+        console.log('Payment result:', paymentIntent);
+        // Handle additional authentication or other cases
+        if (paymentIntent && paymentIntent.next_action) {
+          // The payment requires additional actions, Stripe.js should handle this
           toast({
-            title: t("checkout.paymentFailed"),
-            description: error.message || t("checkout.tryAgain"),
-            variant: "destructive",
+            title: t("checkout.additionalAuthRequired"),
+            description: t("checkout.followInstructions"),
           });
-        } else if (paymentIntent && paymentIntent.status === "succeeded") {
-          toast({
-            title: t("checkout.paymentSuccessful"),
-            description: t("checkout.thankYou"),
-          });
-          
-          // Redirect to success page
-          setLocation("/payment-success");
         } else {
           toast({
             title: t("checkout.unexpectedState"),
@@ -70,33 +88,16 @@ export default function CheckoutForm() {
             variant: "destructive",
           });
         }
-      } catch (err) {
-        toast({
-          title: t("checkout.paymentFailed"),
-          description: t("checkout.tryAgain"),
-          variant: "destructive",
-        });
-      } finally {
-        setIsProcessing(false);
       }
-    } else {
-      // Mockup payment flow
-      setIsProcessing(true);
-      
-      // Simulate payment processing
-      setTimeout(() => {
-        toast({
-          title: t("checkout.paymentSuccessful"),
-          description: t("checkout.thankYou"),
-        });
-        
-        // Simulate redirect to success page
-        setTimeout(() => {
-          setLocation("/payment-success");
-        }, 1000);
-        
-        setIsProcessing(false);
-      }, 2000);
+    } catch (err) {
+      console.error('Payment submission error:', err);
+      toast({
+        title: t("checkout.paymentFailed"),
+        description: t("checkout.tryAgain"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -231,15 +232,20 @@ export default function CheckoutForm() {
         
         <TabsContent value="card">
           <form id="payment-form" onSubmit={handleSubmit}>
-            {stripe && elements && !useCustomForm ? (
-              <PaymentElement />
+            {!stripe || !elements ? (
+              <div className="p-4 mb-4 text-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {t("checkout.loadingStripe")}
+                </p>
+              </div>
             ) : (
-              <CustomCardForm />
+              <PaymentElement />
             )}
             
             <div className="mt-6">
               <Button
-                disabled={isProcessing || (useCustomForm && (!cardholderName || cardNumber.length < 15 || expiryDate.length < 5 || cvv.length < 3))}
+                disabled={isProcessing || !stripe || !elements}
                 type="submit"
                 className="w-full"
                 size="lg"
@@ -253,6 +259,12 @@ export default function CheckoutForm() {
                   t("checkout.payNow")
                 )}
               </Button>
+              
+              {!stripe && (
+                <p className="mt-2 text-sm text-center text-red-500">
+                  {t("checkout.stripeNotInitialized")}
+                </p>
+              )}
             </div>
           </form>
         </TabsContent>

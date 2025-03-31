@@ -9,54 +9,23 @@ export const esTranslations = {
     dashboard: "Panel",
     logout: "Cerrar Sesión"
   },
-  blog: {
-    title: "Blog",
-    subtitle: "Los últimos artículos, ideas y actualizaciones de nuestro equipo"
-  },
-  team: {
-    title: "Nuestro Equipo",
-    subtitle: "Conozca a los profesionales talentosos dedicados a ayudar a su negocio a tener éxito en el panorama digital",
-    founderCeo: "Fundador & CEO",
-    mateoDescription: "Estratega digital con más de 10 años de experiencia ayudando a empresas a transformar su presencia digital.",
-    dianaDescription: "Diseñadora premiada especializada en identidad de marca y diseño UI/UX para plataformas digitales."
-  },
-  values: {
-    title: "Nuestros Valores",
-    subtitle: "Los principios fundamentales que guían nuestro trabajo y relaciones con los clientes",
-    excellence: {
-      title: "Excelencia",
-      description: "Nos esforzamos por la excelencia en cada proyecto, centrándonos en la calidad, la innovación y los resultados."
-    },
-    clientFocus: {
-      title: "Enfoque en el Cliente",
-      description: "Ponemos las necesidades de nuestros clientes en primer lugar, construyendo relaciones sólidas basadas en la confianza y la comunicación."
-    },
-    innovation: {
-      title: "Innovación",
-      description: "Abrazamos tecnologías de vanguardia y pensamiento creativo para ofrecer soluciones innovadoras."
-    },
-    globalVision: {
-      title: "Visión Global",
-      description: "Aportamos una perspectiva multicultural que atiende a clientes diversos en U.S. y América Latina."
-    }
-  },
   hero: {
-    title: "Soluciones Digitales Inteligentes para su Negocio",
-    subtitle: "TOBAIS es una agencia creativa enfocada en Diseño Web, Automatización y Branding para negocios en U.S. y LATAM.",
+    title: "Soluciones Digitales Inteligentes para tu Negocio",
+    subtitle: "TOBAIS es una agencia creativa enfocada en Diseño Web, Automatización y Branding para negocios en U.S. y América Latina.",
     cta1: "Obtener Cotización",
-    cta2: "Agendar Llamada"
+    cta2: "Programar una Llamada"
   },
   services: {
     title: "Nuestros Servicios",
     subtitle: "Ayudamos a las empresas a transformar su presencia digital con soluciones integrales.",
     buyNow: "Comprar Ahora",
-    contactUs: "Contáctenos",
+    contactUs: "Contáctanos",
     price: "desde",
     webDesign: {
       title: "Diseño Web",
       description: "Sitios web responsivos personalizados que atraen y convierten visitantes con diseños modernos.",
       features: [
-        "Diseño responsivo",
+        "Diseño responsive",
         "Optimización SEO",
         "UI/UX moderno"
       ],
@@ -64,19 +33,19 @@ export const esTranslations = {
     },
     automation: {
       title: "Automatización",
-      description: "Optimice sus procesos de negocio con soluciones de automatización impulsadas por IA.",
+      description: "Optimiza los procesos de tu negocio con soluciones de automatización impulsadas por IA.",
       features: [
         "Automatización de flujos",
         "Integraciones con IA",
-        "Análisis de negocio"
+        "Análisis de negocios"
       ],
       price: "desde"
     },
     branding: {
       title: "Branding",
-      description: "Cree una identidad de marca memorable que resuene con su público objetivo.",
+      description: "Crea una identidad de marca memorable que resuene con tu audiencia objetivo.",
       features: [
-        "Diseño de logo",
+        "Diseño de logotipo",
         "Estrategia de marca",
         "Materiales de marketing"
       ],
@@ -84,20 +53,20 @@ export const esTranslations = {
     },
     socialMedia: {
       title: "Marketing en Redes Sociales",
-      description: "Conecte con su audiencia a través de campañas estratégicas de marketing en redes sociales.",
+      description: "Interactúa con tu audiencia a través de estratégicas campañas de marketing en redes sociales.",
       features: [
         "Marketing en Facebook",
         "Contenido para Instagram",
-        "Campañas en WhatsApp",
+        "Campañas de WhatsApp",
         "Estrategia para LinkedIn"
       ],
       price: "desde"
     },
     accounting: {
       title: "Contabilidad",
-      description: "Servicios de contabilidad profesionales para ayudar a gestionar las finanzas de su negocio de manera efectiva.",
+      description: "Servicios contables profesionales para ayudar a gestionar eficazmente las finanzas de tu empresa.",
       features: [
-        "Teneduría de libros",
+        "Contabilidad",
         "Preparación de impuestos",
         "Informes financieros",
         "Consultoría empresarial"
@@ -107,10 +76,10 @@ export const esTranslations = {
   },
   about: {
     title: "Sobre TOBAIS",
-    description: "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en U.S. y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para ofrecer soluciones que impulsan el crecimiento.",
+    description: "TOBAIS, Technology on Business Artificial Intelligence Solutions, es una agencia digital creativa comprometida con el empoderamiento de pequeñas empresas en U.S. y América Latina. Combinamos diseño innovador, tecnología de vanguardia y pensamiento estratégico para entregar soluciones que impulsan el crecimiento.",
     mission: {
       title: "Nuestra Misión",
-      description: "Proporcionar soluciones digitales accesibles y de alta calidad que nivelen el campo de juego para pequeñas empresas que compiten en el panorama digital."
+      description: "Proporcionar soluciones digitales accesibles y de alta calidad que nivelen el campo de juego para las pequeñas empresas que compiten en el panorama digital."
     },
     vision: {
       title: "Nuestra Visión",
@@ -118,7 +87,7 @@ export const esTranslations = {
     }
   },
   testimonials: {
-    title: "Lo Que Dicen Nuestros Clientes",
+    title: "Lo que Dicen Nuestros Clientes",
     prev: "Anterior",
     next: "Siguiente"
   },
@@ -127,7 +96,7 @@ export const esTranslations = {
     items: [
       {
         question: "¿Cuánto tiempo toma completar un sitio web?",
-        answer: "Normalmente, nuestros proyectos de diseño web toman de 2 a 6 semanas según la complejidad. Los sitios simples pueden completarse en tan solo 2 semanas, mientras que los proyectos más complejos con características personalizadas pueden tomar de 4 a 6 semanas."
+        answer: "Normalmente, nuestros proyectos de diseño web tardan entre 2 y 6 semanas dependiendo de la complejidad. Los sitios sencillos pueden completarse en tan solo 2 semanas, mientras que proyectos más complejos con características personalizadas pueden tardar entre 4 y 6 semanas."
       },
       {
         question: "¿Ofrecen servicios de mantenimiento?",
@@ -138,58 +107,58 @@ export const esTranslations = {
         answer: "Nuestros servicios de automatización incluyen automatización de flujos de trabajo, automatización de marketing por correo electrónico, programación de redes sociales, gestión de datos de clientes, integración de CRM y creación de contenido impulsada por IA. Personalizamos soluciones basadas en sus necesidades comerciales específicas."
       },
       {
-        question: "¿Trabajan con clientes tanto en U.S. como en América Latina?",
-        answer: "Sí, con orgullo servimos a clientes tanto en U.S. como en toda América Latina. Nuestro equipo es completamente bilingüe (inglés/español) y está familiarizado con los panoramas empresariales en ambas regiones, lo que nos permite proporcionar soluciones culturalmente relevantes."
+        question: "¿Trabajan con clientes tanto en EE. UU. como en América Latina?",
+        answer: "Sí, atendemos con orgullo a clientes tanto en U.S. como en toda América Latina. Nuestro equipo es completamente bilingüe (inglés/español) y está familiarizado con los panoramas comerciales en ambas regiones, lo que nos permite proporcionar soluciones culturalmente relevantes."
       }
     ]
   },
   contact: {
-    title: "Contáctanos",
-    subtitle: "¿Tiene un proyecto en mente? Hablemos de cómo podemos ayudar a su negocio a prosperar en el mundo digital.",
+    title: "Ponte en Contacto",
+    subtitle: "¿Tienes un proyecto en mente? Hablemos sobre cómo podemos ayudar a tu negocio a prosperar en el mundo digital.",
     form: {
       name: "Nombre",
       email: "Correo electrónico",
       serviceType: "Tipo de Servicio",
-      selectService: "Seleccionar un servicio",
+      selectService: "Selecciona un servicio",
       message: "Mensaje",
       submit: "Enviar",
       errors: {
-        name: "Nombre es requerido",
-        email: "Correo electrónico válido es requerido",
-        message: "Mensaje es requerido"
+        name: "El nombre es requerido",
+        email: "Un correo válido es requerido",
+        message: "El mensaje es requerido"
       },
       success: "¡Éxito! Tu mensaje ha sido enviado."
     },
     info: {
       title: "Información de Contacto",
-      email: "Correo Electrónico",
+      email: "Correo",
       phone: "Teléfono",
-      locations: "Ubicaciones de Oficinas",
-      locationText: "Charlotte, NC (U.S.) & Montevideo (Uruguay)",
-      connect: "Conéctate Con Nosotros",
+      locations: "Oficinas",
+      locationText: "Charlotte, NC (US) & Montevideo (Uruguay)",
+      connect: "Conéctate con Nosotros",
       schedule: {
-        title: "Agenda una Consulta",
-        description: "Reserve una consulta gratuita de 30 minutos para discutir las necesidades de su proyecto.",
+        title: "Programa una Consulta",
+        description: "Reserva una consulta gratuita de 30 minutos para discutir las necesidades de tu proyecto.",
         button: "Reservar una cita"
       },
       map: {
         title: "Encuéntranos",
-        description: "Nuestras oficinas en Charlotte (North Carolina) y Montevideo (Uruguay) están estratégicamente ubicadas para atender a clientes tanto en América del Norte como en América del Sur."
+        description: "Nuestras oficinas en Charlotte (Carolina del Norte) y Montevideo (Uruguay) están estratégicamente ubicadas para atender a clientes en América del Norte y del Sur."
       }
     }
   },
   cta: {
     title: "¿Listo para Transformar tu Presencia Digital?",
-    description: "Colaboremos para crear soluciones digitales inteligentes que ayuden a su negocio a prosperar en el panorama competitivo actual.",
-    button1: "Inicia Tu Proyecto",
-    button2: "Más Información"
+    description: "Colaboremos para crear soluciones digitales inteligentes que ayuden a tu negocio a prosperar en el competitivo panorama actual.",
+    button1: "Iniciar tu Proyecto",
+    button2: "Saber Más"
   },
   footer: {
     description: "Soluciones digitales inteligentes para empresas en U.S. y América Latina.",
     services: "Servicios",
-    company: "Compañía",
+    company: "Empresa",
     legal: "Legal",
-    aboutUs: "Nosotros",
+    aboutUs: "Sobre Nosotros",
     blog: "Blog",
     careers: "Carreras",
     contact: "Contacto",
@@ -200,19 +169,19 @@ export const esTranslations = {
     language: "Español"
   },
   ai: {
-    label: "SOLUCIONES IMPULSADAS POR IA",
+    label: "SOLUCIONES POTENCIADAS POR IA",
     title: "Transforma tu Marketing Digital con IA",
-    description: "Nuestra suite de herramientas impulsadas por IA ayuda a las empresas a crear contenido atractivo, analizar tendencias del mercado y ofrecer experiencias personalizadas que impulsan el crecimiento.",
+    description: "Nuestro conjunto de herramientas impulsadas por IA ayuda a las empresas a crear contenido atractivo, analizar tendencias del mercado y ofrecer experiencias personalizadas que impulsan el crecimiento.",
     learnMore: "Más Información",
     getStarted: "Comenzar",
     solutions: {
       contentGeneration: {
         title: "Generación de Contenido",
-        description: "Herramienta impulsada por IA para crear contenido atractivo para múltiples plataformas de redes sociales."
+        description: "Herramienta potenciada por IA para crear contenido atractivo para múltiples plataformas de redes sociales."
       },
       multilingual: {
         title: "Soporte Multilingüe",
-        description: "Traduce y adapta automáticamente tu contenido para audiencias globales."
+        description: "Traduzca y adapte automáticamente su contenido para audiencias globales."
       },
       brandingAssistant: {
         title: "Asistente de Marca",
@@ -224,43 +193,43 @@ export const esTranslations = {
       },
       marketAnalysis: {
         title: "Análisis de Mercado",
-        description: "Insights basados en datos para entender tendencias del mercado y comportamiento del cliente."
+        description: "Información basada en datos para comprender las tendencias del mercado y el comportamiento del cliente."
       }
     },
     cta: {
-      title: "¿Listo para aprovechar la IA en tu negocio?",
+      title: "¿Listo para aprovechar la IA para tu negocio?",
       description: "Crea una cuenta para acceder a nuestra suite completa de herramientas de marketing impulsadas por IA.",
       button: "Obtener Acceso Ahora"
     }
   },
   auth: {
     loginTitle: "Bienvenido de Nuevo",
-    loginSubtitle: "Inicie sesión para acceder a su cuenta",
+    loginSubtitle: "Inicia sesión para acceder a tu cuenta",
     registerTitle: "Crear Cuenta",
-    registerSubtitle: "Únase a TOBAIS para transformar su presencia digital",
-    username: "Nombre de usuario",
-    email: "Correo electrónico",
+    registerSubtitle: "Únete a TOBAIS para transformar tu presencia digital",
+    username: "Usuario",
+    email: "Correo Electrónico",
     password: "Contraseña",
-    fullName: "Nombre completo",
+    fullName: "Nombre Completo",
     loginButton: "Iniciar Sesión",
     registerButton: "Registrarse",
-    alreadyHaveAccount: "¿Ya tiene una cuenta?",
-    noAccount: "¿No tiene una cuenta?",
-    loginLink: "Inicie sesión aquí",
-    registerLink: "Regístrese aquí",
-    heroTitle: "Transforme Su Presencia Digital",
-    heroSubtitle: "Acceda a servicios y herramientas premium para hacer crecer su negocio en línea.",
+    alreadyHaveAccount: "¿Ya tienes una cuenta?",
+    noAccount: "¿No tienes una cuenta?",
+    loginLink: "Inicia sesión aquí",
+    registerLink: "Regístrate aquí",
+    heroTitle: "Transforma tu Presencia Digital",
+    heroSubtitle: "Accede a servicios y herramientas premium para hacer crecer tu negocio en línea.",
     errors: {
-      usernameRequired: "Nombre de usuario es requerido",
-      emailRequired: "Correo electrónico es requerido",
-      emailInvalid: "Por favor ingrese un correo electrónico válido",
-      passwordRequired: "Contraseña es requerida",
+      usernameRequired: "El nombre de usuario es requerido",
+      emailRequired: "El correo electrónico es requerido",
+      emailInvalid: "Por favor ingresa una dirección de correo válida",
+      passwordRequired: "La contraseña es requerida",
       passwordLength: "La contraseña debe tener al menos 6 caracteres"
     }
   },
   dashboard: {
-    welcome: "Bienvenido a su panel,",
-    title: "Panel de Control",
+    welcome: "Bienvenido a tu panel,",
+    title: "Panel",
     projects: "Mis Proyectos",
     socialMedia: "Redes Sociales",
     analytics: "Analíticas",
@@ -268,9 +237,9 @@ export const esTranslations = {
     adminPanel: "Panel de Administrador",
     noProjects: "Aún no hay proyectos",
     socialMediaGenerator: {
-      title: "Generador de Contenido para Redes Sociales con IA",
-      description: "Genere contenido atractivo para redes sociales para su negocio",
-      prompt: "¿Sobre qué le gustaría publicar?",
+      title: "Generador de Contenido IA para Redes Sociales",
+      description: "Genera contenido atractivo para redes sociales para tu negocio",
+      prompt: "¿Sobre qué te gustaría publicar?",
       businessInfo: "Información del negocio",
       platform: "Plataforma",
       language: "Idioma",
@@ -285,88 +254,95 @@ export const esTranslations = {
       generatedContent: "Contenido Generado",
       hashtags: "Hashtags Sugeridos",
       savedSuccess: "Contenido guardado exitosamente",
-      multiPlatform: "Generador Multiplataforma",
+      multiPlatform: "Generador Multi-plataforma",
       selectPlatforms: "Seleccionar plataformas",
       generateMulti: "Generar para Todas las Plataformas"
     },
     contentRecommendations: {
       title: "Recomendaciones de Contenido",
-      description: "Obtenga recomendaciones de contenido impulsadas por IA basadas en su audiencia",
+      description: "Obtén recomendaciones de contenido impulsadas por IA basadas en tu audiencia",
       audience: "Audiencia Objetivo",
       industry: "Industria",
       generate: "Obtener Recomendaciones",
       topics: "Temas Sugeridos",
       contentTypes: "Tipos de Contenido Recomendados",
       platforms: "Plataformas Recomendadas",
-      noRecommendations: "Aún no hay recomendaciones. Genere para ver resultados."
+      noRecommendations: "Aún no hay recomendaciones. Genera para ver resultados."
     }
   },
   checkout: {
     title: "Pago",
-    loading: "Cargando información de pago...",
-    noServiceSelected: "No hay servicio seleccionado",
-    pleaseSelectService: "Por favor seleccione un servicio desde nuestra página de servicios para continuar.",
-    noInvoicesSelected: "No Hay Facturas Seleccionadas",
-    pleaseSelectInvoices: "Por favor regrese a su panel y seleccione facturas para pagar.",
-    browseServices: "Explorar Servicios",
-    backToDashboard: "Volver al Panel",
+    loading: "Cargando...",
+    loadingPayment: "Cargando información de pago...",
+    loadingStripe: "Cargando formulario de pago...",
     paymentInformation: "Información de Pago",
+    payWithCard: "Pagar con Tarjeta de Crédito",
+    payNow: "Pagar Ahora",
+    processing: "Procesando...",
+    paymentSuccessful: "Pago Exitoso",
+    paymentFailed: "Pago Fallido",
+    paymentError: "Error de Pago",
+    stripeNotInitialized: "Procesador de pago no inicializado. Por favor, inténtelo de nuevo más tarde.",
+    unexpectedState: "Estado de Pago Inesperado",
+    contactSupport: "Por favor, contacte con soporte para recibir asistencia.",
+    tryAgain: "Por favor, inténtelo de nuevo o utilice otro método de pago.",
+    thankYou: "¡Gracias por su pago!",
+    additionalAuthRequired: "Autenticación Adicional Requerida",
+    followInstructions: "Por favor, siga las instrucciones para completar su pago.",
     orderSummary: "Resumen del Pedido",
     invoiceSummary: "Resumen de Facturas",
-    invoiceSummaryDesc: "Está a punto de pagar {count} factura(s) seleccionada(s).",
+    invoiceSummaryDesc: "Resumen de {count} facturas seleccionadas",
     invoiceCount: "Número de Facturas",
     subtotal: "Subtotal",
     tax: "Impuesto (8%)",
     total: "Total",
-    payNow: "Pagar Ahora",
-    processing: "Procesando...",
-    paymentFailed: "Pago Fallido",
-    tryAgain: "Por favor intente de nuevo o use un método de pago diferente.",
-    paymentSuccessful: "Pago Exitoso",
-    thankYou: "¡Gracias por su pago!",
-    unexpectedState: "Estado de Pago Inesperado",
-    contactSupport: "Por favor contacte a soporte para asistencia.",
-    securePayment: "Todos los pagos son seguros y encriptados.",
-    guaranteeMessage: "Garantía de devolución de dinero de 30 días si no está satisfecho."
+    securePayment: "Los pagos se procesan de forma segura a través de Stripe",
+    guaranteeMessage: "Garantía de devolución de dinero de 30 días si no está satisfecho.",
+    noServiceSelected: "Ningún Servicio Seleccionado",
+    pleaseSelectService: "Por favor, seleccione un servicio antes de proceder al pago.",
+    noInvoicesSelected: "Ninguna Factura Seleccionada",
+    pleaseSelectInvoices: "Por favor, seleccione facturas antes de proceder al pago.",
+    browseServices: "Explorar Servicios",
+    backToDashboard: "Volver al Panel"
   },
   paymentSuccess: {
     title: "¡Pago Exitoso!",
-    description: "Gracias por su compra. Hemos recibido su pago y comenzaremos a procesar su pedido inmediatamente.",
+    description: "Gracias por tu compra. Hemos recibido tu pago y comenzaremos a procesar tu pedido inmediatamente.",
     transactionId: "ID de Transacción:",
-    viewDashboard: "Ver Panel de Control",
+    viewDashboard: "Ver Panel",
     returnHome: "Volver al Inicio",
-    supportMessage: "Si tiene alguna pregunta sobre su compra, por favor contáctenos en:"
+    supportMessage: "Si tienes alguna pregunta sobre tu compra, por favor contáctanos en:"
   },
   process: {
     title: "Nuestro Proceso",
-    subtitle: "Seguimos un enfoque optimizado para entregar soluciones digitales excepcionales para su negocio",
+    subtitle: "Seguimos un enfoque optimizado para ofrecer soluciones digitales excepcionales para tu negocio",
     steps: {
       discover: {
         title: "Descubrimiento",
-        description: "Comenzamos entendiendo su negocio, objetivos y audiencia objetivo para establecer objetivos claros del proyecto."
+        description: "Comenzamos por entender tu negocio, objetivos y audiencia objetivo para establecer claros objetivos del proyecto."
       },
       design: {
         title: "Diseño",
-        description: "Nuestro equipo creativo desarrolla maquetas y prototipos que se alinean con su marca y requisitos de experiencia de usuario."
+        description: "Nuestro equipo creativo desarrolla maquetas y prototipos que se alinean con tu marca y requisitos de experiencia de usuario."
       },
       develop: {
         title: "Desarrollo",
-        description: "Construimos su solución utilizando tecnologías de vanguardia, asegurando una implementación responsiva, escalable y segura."
+        description: "Construimos tu solución utilizando tecnologías de vanguardia, asegurando una implementación responsiva, escalable y segura."
       },
       deliver: {
         title: "Entrega",
-        description: "Después de pruebas exhaustivas, lanzamos su proyecto y proporcionamos capacitación y soporte continuo según sea necesario."
+        description: "Después de pruebas exhaustivas, lanzamos tu proyecto y proporcionamos capacitación y soporte continuo según sea necesario."
       }
     },
     cta: {
-      title: "¿Listo para Iniciar su Proyecto?",
-      description: "Colaboremos para crear una solución digital que ayude a su negocio a prosperar en el panorama competitivo actual.",
+      title: "¿Listo para Iniciar tu Proyecto?",
+      description: "Colaboremos para crear una solución digital que ayude a tu negocio a prosperar en el competitivo panorama actual.",
       button: "Comenzar"
     }
   },
   projects: {
     title: "Proyectos Destacados",
-    subtitle: "Eche un vistazo a algunos de nuestros proyectos exitosos para clientes y los resultados que hemos entregado",
+    subtitle: "Echa un vistazo a algunos de nuestros exitosos proyectos para clientes y los resultados que hemos entregado",
     noProjects: "No hay proyectos disponibles en este momento. ¡Vuelva pronto!",
     viewCase: "Ver Caso de Estudio",
     viewAll: "Ver Todos los Proyectos"
