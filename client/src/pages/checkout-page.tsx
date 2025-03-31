@@ -13,12 +13,16 @@ import { Loader2, CreditCard } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 
-// Initialize Stripe with the public key
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+// Initialize Stripe with the public key if available
+const hasStripeKey = !!import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+if (!hasStripeKey) {
   console.error('Missing Stripe public key. Payments will not work correctly.');
 }
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// Safely attempt to load Stripe only if the key is available
+const stripePromise = hasStripeKey 
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) 
+  : Promise.resolve(null);
 
 export default function CheckoutPage() {
   const [location] = useLocation();
@@ -32,7 +36,9 @@ export default function CheckoutPage() {
 
   // Extract parameters from URL query parameters
   useEffect(() => {
-    const params = new URLSearchParams(location.split("?")[1]);
+    // Safely extract query parameters, handling cases with no "?" in the URL
+    const queryString = location.includes("?") ? location.split("?")[1] : "";
+    const params = new URLSearchParams(queryString);
     
     // Check checkout type
     const type = params.get("type");
@@ -43,8 +49,11 @@ export default function CheckoutPage() {
       const invoiceIdsParam = params.get("invoiceIds");
       const amountParam = params.get("amount");
       
-      if (invoiceIdsParam) {
+      if (invoiceIdsParam && invoiceIdsParam.includes(',')) {
         setInvoiceIds(invoiceIdsParam.split(',').map(id => parseInt(id, 10)));
+      } else if (invoiceIdsParam) {
+        // Handle case with single invoice ID
+        setInvoiceIds([parseInt(invoiceIdsParam, 10)]);
       }
       
       if (amountParam) {

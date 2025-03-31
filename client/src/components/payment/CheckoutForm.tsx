@@ -120,21 +120,30 @@ export default function CheckoutForm() {
 
   // Format card number input (add spaces every 4 digits)
   const formatCardNumber = (value: string) => {
+    // Return empty string if value is null, undefined or empty
+    if (!value) return '';
+    
+    // Sanitize input: remove spaces and non-numeric characters
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    
+    // Try to match digits in groups of 4 or more (up to 16)
     const matches = v.match(/\d{4,16}/g);
-    // Fix: safely check if matches exists and has items before accessing
-    const match = matches && matches.length > 0 ? matches[0] : '';
+    
+    // Fallback value if no matches found
+    if (!matches || matches.length === 0) {
+      return v;
+    }
+    
+    const match = matches[0];
     const parts = [];
 
+    // Split into groups of 4 digits
     for (let i = 0, len = match.length; i < len; i += 4) {
       parts.push(match.substring(i, i + 4));
     }
 
-    if (parts.length) {
-      return parts.join(' ');
-    } else {
-      return value;
-    }
+    // Join with spaces or return the sanitized input
+    return parts.length > 0 ? parts.join(' ') : v;
   };
 
   // Custom card input component
@@ -217,11 +226,14 @@ export default function CheckoutForm() {
     </div>
   );
 
+  // Check if Stripe is completely unavailable
+  const isStripeUnavailable = stripe === null;
+
   return (
     <div>
-      <Tabs defaultValue="card" className="w-full mb-6" onValueChange={(value) => setPaymentMethod(value as "card" | "paypal")}>
+      <Tabs defaultValue={isStripeUnavailable ? "paypal" : "card"} className="w-full mb-6" onValueChange={(value) => setPaymentMethod(value as "card" | "paypal")}>
         <TabsList className="grid grid-cols-2 mb-8">
-          <TabsTrigger value="card" className="flex items-center">
+          <TabsTrigger value="card" className="flex items-center" disabled={isStripeUnavailable}>
             <CreditCard className="w-4 h-4 mr-2" />
             Credit Card
           </TabsTrigger>
@@ -232,42 +244,50 @@ export default function CheckoutForm() {
         </TabsList>
         
         <TabsContent value="card">
-          <form id="payment-form" onSubmit={handleSubmit}>
-            {!stripe || !elements ? (
-              <div className="p-4 mb-4 text-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {t("checkout.loadingStripe")}
-                </p>
-              </div>
-            ) : (
-              <PaymentElement />
-            )}
-            
-            <div className="mt-6">
-              <Button
-                disabled={isProcessing || !stripe || !elements}
-                type="submit"
-                className="w-full"
-                size="lg"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("checkout.processing")}
-                  </>
-                ) : (
-                  t("checkout.payNow")
-                )}
-              </Button>
-              
-              {!stripe && (
-                <p className="mt-2 text-sm text-center text-red-500">
-                  {t("checkout.stripeNotInitialized")}
-                </p>
-              )}
+          {isStripeUnavailable ? (
+            <div className="p-6 border rounded-md bg-red-50 dark:bg-red-900/20 mb-4">
+              <h3 className="text-lg font-medium text-red-800 dark:text-red-300 mb-2">
+                {t("checkout.stripeUnavailable")}
+              </h3>
+              <p className="text-red-700 dark:text-red-400 mb-3">
+                {t("checkout.pleaseSelectPayPal")}
+              </p>
+              <p className="text-sm text-red-600 dark:text-red-500">
+                {t("checkout.stripeNotConfigured")}
+              </p>
             </div>
-          </form>
+          ) : (
+            <form id="payment-form" onSubmit={handleSubmit}>
+              {!elements ? (
+                <div className="p-4 mb-4 text-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {t("checkout.loadingStripe")}
+                  </p>
+                </div>
+              ) : (
+                <PaymentElement />
+              )}
+              
+              <div className="mt-6">
+                <Button
+                  disabled={isProcessing || !elements}
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {t("checkout.processing")}
+                    </>
+                  ) : (
+                    t("checkout.payNow")
+                  )}
+                </Button>
+              </div>
+            </form>
+          )}
         </TabsContent>
         
         <TabsContent value="paypal">
@@ -277,7 +297,7 @@ export default function CheckoutForm() {
                 <FaPaypal className="w-12 h-12 text-blue-600" />
               </div>
               <p className="text-center text-gray-700 dark:text-gray-300 mb-4">
-                Conectarse con PayPal para procesar su pago de forma segura.
+                {t("checkout.payWithPayPal")}
               </p>
             </div>
             

@@ -13,6 +13,7 @@ import CheckoutPage from "@/pages/checkout-page";
 import PaymentSuccessPage from "@/pages/payment-success-page";
 import TestPaymentPage from "@/pages/test-payment-page";
 import TestPayPalPage from "@/pages/test-paypal-page";
+import PayPalTestPage from "@/pages/paypal-test";
 import BlogPage from "@/pages/blog-page";
 import BlogPostPage from "@/pages/blog-post-page";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -35,6 +36,7 @@ function Router() {
       <ProtectedRoute path="/payment-success" component={PaymentSuccessPage} />
       <Route path="/test-payment" component={TestPaymentPage} />
       <Route path="/test-paypal" component={TestPayPalPage} />
+      <Route path="/paypal-test" component={PayPalTestPage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -55,15 +55,15 @@ export default function Footer() {
             <h3 className="font-bold text-lg mb-4">{t("footer.company")}</h3>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link href="/about">
-                  <a className="hover:text-white transition-colors">{t("footer.aboutUs")}</a>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  {t("footer.aboutUs")}
                 </Link>
               </li>
               <li><a href="#" className="hover:text-white transition-colors">{t("footer.blog")}</a></li>
               <li><a href="#" className="hover:text-white transition-colors">{t("footer.careers")}</a></li>
               <li>
-                <Link href="/contact">
-                  <a className="hover:text-white transition-colors">{t("footer.contact")}</a>
+                <Link href="/contact" className="hover:text-white transition-colors">
+                  {t("footer.contact")}
                 </Link>
               </li>
             </ul>
