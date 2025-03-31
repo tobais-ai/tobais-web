@@ -2,161 +2,125 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Loader2, CreditCard, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
+import { PayPalButton } from "@/components/payment/PayPalButton";
+import { apiRequest } from "@/lib/queryClient";
+import CheckoutForm from "@/components/payment/CheckoutForm";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-// Initialize Stripe with the public key
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  console.error('Missing Stripe public key. Payments will not work correctly.');
-}
+// Initialize Stripe with the public key if available
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const hasStripeKey = !!stripePublicKey;
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// Safely attempt to load Stripe only if the key is available
+const stripePromise = hasStripeKey 
+  ? loadStripe(stripePublicKey) 
+  : Promise.resolve(null);
 
-function TestPaymentForm() {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [, setLocation] = useLocation();
+export default function TestPaymentPage() {
+  const [, navigate] = useLocation();
+  const { t } = useLanguage();
   const { toast } = useToast();
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe');
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Test amount is always $1.00 USD
+  const testAmount = 1.00;
 
-    if (!stripe || !elements) {
-      console.error('Stripe has not loaded yet');
-      toast({
-        title: "Error",
-        description: "Stripe has not initialized yet. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsProcessing(true);
-
+  const handleCreateTestPayment = async () => {
+    setIsLoading(true);
+    setPaymentStatus('processing');
+    setErrorMessage("");
+    
     try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: window.location.origin + "/payment-success",
-        },
-        redirect: "if_required"
+      const response = await apiRequest('POST', '/api/test-payment', { 
+        isTestPayment: true
       });
-
-      if (error) {
-        console.error('Payment error:', error);
+      
+      const data = await response.json();
+      console.log('Test payment response:', data);
+      
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
         toast({
-          title: "Payment Failed",
-          description: error.message || "Please try again.",
-          variant: "destructive",
+          title: t("testPayment.intentCreated"),
+          description: t("testPayment.readyForPayment"),
         });
-      } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        toast({
-          title: "Payment Successful",
-          description: "Thank you for your payment of $1.00.",
-        });
-        
-        // Redirect to success page
-        setLocation("/payment-success");
       } else {
-        console.log('Payment result:', paymentIntent);
-        if (paymentIntent && paymentIntent.next_action) {
-          toast({
-            title: "Additional Authentication Required",
-            description: "Please follow the instructions to complete the payment.",
-          });
-        } else {
-          toast({
-            title: "Unexpected Payment State",
-            description: "Please contact support.",
-            variant: "destructive",
-          });
-        }
+        throw new Error('No client secret returned');
       }
-    } catch (err) {
-      console.error('Payment submission error:', err);
+    } catch (error: any) {
+      console.error('Error creating test payment:', error);
+      setPaymentStatus('error');
+      setErrorMessage(error.message);
       toast({
-        title: "Payment Failed",
-        description: "An unexpected error occurred. Please try again.",
+        title: t("testPayment.error"),
+        description: error.message,
         variant: "destructive",
       });
     } finally {
-      setIsProcessing(false);
+      setIsLoading(false);
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement />
-      
-      <Button 
-        disabled={isProcessing || !stripe || !elements}
-        type="submit"
-        className="w-full mt-4"
-      >
-        {isProcessing ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Processing...
-          </>
-        ) : (
-          "Pay $1.00"
-        )}
-      </Button>
-    </form>
-  );
-}
+  const handlePayPalSuccess = () => {
+    setPaymentStatus('success');
+    toast({
+      title: t("testPayment.success"),
+      description: t("testPayment.paypalSuccessful"),
+    });
+  };
 
-export default function TestPaymentPage() {
-  const [clientSecret, setClientSecret] = useState("");
-  const { toast } = useToast();
+  const handlePayPalError = (error: any) => {
+    setPaymentStatus('error');
+    setErrorMessage(error.message || "PayPal payment failed");
+    toast({
+      title: t("testPayment.error"),
+      description: error.message || t("testPayment.paypalFailed"),
+      variant: "destructive",
+    });
+  };
 
-  useEffect(() => {
-    // Create test payment intent
-    fetch('/api/test-payment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Test payment intent created:', data);
-        setClientSecret(data.clientSecret);
-        toast({
-          title: "Test Payment Ready",
-          description: `Created test payment intent for $${data.amount.toFixed(2)}`,
-        });
-      })
-      .catch(error => {
-        console.error('Error creating test payment:', error);
-        toast({
-          title: "Error",
-          description: "Failed to create test payment. See console for details.",
-          variant: "destructive",
-        });
-      });
-  }, [toast]);
+  // Options for Stripe Elements
+  const options: StripeElementsOptions = {
+    clientSecret,
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#6366f1',
+      },
+    },
+  };
 
-  if (!clientSecret) {
+  // Payment success UI
+  if (paymentStatus === 'success') {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-          <div className="text-center">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-            <h2 className="text-xl font-medium text-gray-900 dark:text-white">
-              Creating test payment...
-            </h2>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">
+            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {t("testPayment.success")}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              {t("testPayment.successMessage")}
+            </p>
+            <div className="space-y-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+              >
+                {t("testPayment.backToDashboard")}
+              </button>
+            </div>
           </div>
         </div>
         <Footer />
@@ -168,25 +132,130 @@ export default function TestPaymentPage() {
     <>
       <Navbar />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-        <div className="max-w-md mx-auto px-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">
-              Test Payment ($1.00)
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {t("testPayment.title")}
             </h1>
-            
-            <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
-              This is a test payment of $1.00 to verify the Stripe integration.
+            <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
+              {t("testPayment.subtitle")}
             </p>
-            
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <TestPaymentForm />
-              </Elements>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {t("testPayment.testDetails")}
+              </h2>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                {t("testPayment.description")}
+              </p>
             </div>
-            
-            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 text-center">
-              This is a real payment that will charge your card $1.00.
-            </p>
+
+            <div className="p-6">
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {t("testPayment.amount")}
+                  </span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ${testAmount.toFixed(2)} USD
+                  </span>
+                </div>
+                
+                {!clientSecret && (
+                  <div className="space-y-4">
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={handleCreateTestPayment}
+                        disabled={isLoading}
+                        className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-md transition-colors"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                            {t("testPayment.processing")}
+                          </>
+                        ) : (
+                          t("testPayment.createPayment")
+                        )}
+                      </Button>
+                    </div>
+
+                    {paymentStatus === 'error' && (
+                      <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-md">
+                        <div className="flex">
+                          <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
+                          <div>
+                            <h3 className="text-sm font-medium text-red-800 dark:text-red-400">
+                              {t("testPayment.error")}
+                            </h3>
+                            <p className="mt-1 text-sm text-red-700 dark:text-red-300">
+                              {errorMessage || t("testPayment.genericError")}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {clientSecret && (
+                  <div className="space-y-6">
+                    <div className="flex justify-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                      <div className="flex space-x-4">
+                        <button
+                          onClick={() => setPaymentMethod('stripe')}
+                          className={`py-2 px-4 rounded-md ${
+                            paymentMethod === 'stripe'
+                              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-medium'
+                              : 'text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <CreditCard className="h-5 w-5 mr-2" />
+                            {t("testPayment.creditCard")}
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => setPaymentMethod('paypal')}
+                          className={`py-2 px-4 rounded-md ${
+                            paymentMethod === 'paypal'
+                              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-medium'
+                              : 'text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <span className="font-semibold text-blue-600 mr-1">Pay</span>
+                            <span className="font-semibold text-blue-800">Pal</span>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+
+                    {paymentMethod === 'stripe' && stripePromise ? (
+                      <Elements stripe={stripePromise} options={options}>
+                        <CheckoutForm onSuccess={() => setPaymentStatus('success')} />
+                      </Elements>
+                    ) : paymentMethod === 'paypal' ? (
+                      <div className="flex justify-center py-4">
+                        <PayPalButton 
+                          amount={testAmount} 
+                          onSuccess={handlePayPalSuccess}
+                          onError={handlePayPalError}
+                          isTestPayment
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-center py-4 text-amber-600 dark:text-amber-400">
+                        <AlertCircle className="h-6 w-6 mx-auto mb-2" />
+                        <p>{t("testPayment.stripeNotConfigured")}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </main>

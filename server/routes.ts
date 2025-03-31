@@ -443,6 +443,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Test endpoint for $1.00 payment (only for testing)
     app.post("/api/test-payment", async (req, res, next) => {
       try {
+        console.log("Creating test payment intent with body:", req.body);
+        
+        // Authentication is optional for test payments to simplify testing
+        const userId = req.isAuthenticated() ? req.user.id : null;
         const testAmount = 1.00; // $1.00 USD for testing
         
         const paymentIntent = await stripe.paymentIntents.create({
@@ -450,8 +454,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           currency: "usd",
           metadata: {
             test: "true",
-            purpose: "API validation"
+            purpose: "API validation",
+            userId: userId ? userId.toString() : "unauthenticated",
+            isTestPayment: "true"
           }
+        });
+        
+        console.log("Test payment intent created successfully:", {
+          id: paymentIntent.id,
+          amount: testAmount,
+          hasClientSecret: !!paymentIntent.client_secret
         });
         
         res.json({ 
@@ -460,6 +472,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: "Test payment intent created successfully" 
         });
       } catch (error: any) {
+        console.error("Error creating test payment intent:", error);
         res.status(500).json({ message: "Error creating test payment intent: " + error.message });
       }
     });

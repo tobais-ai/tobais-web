@@ -14,7 +14,11 @@ import { Loader2, CreditCard, Calendar, CreditCardIcon, Lock } from "lucide-reac
 import { FaPaypal } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+  onSuccess?: () => void;
+}
+
+export default function CheckoutForm({ onSuccess }: CheckoutFormProps = {}) {
   const stripe = useStripe();
   const elements = useElements();
   const [, setLocation] = useLocation();
@@ -70,8 +74,13 @@ export default function CheckoutForm() {
           description: t("checkout.thankYou"),
         });
         
-        // Redirect to success page
-        setLocation("/payment-success");
+        // Call onSuccess callback if provided
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          // Default behavior - redirect to success page
+          setLocation("/payment-success");
+        }
       } else {
         console.log('Payment result:', paymentIntent);
         // Handle additional authentication or other cases
@@ -112,8 +121,13 @@ export default function CheckoutForm() {
         description: t("checkout.thankYou"),
       });
       
-      // Redirect to success page
-      setLocation("/payment-success");
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        // Default behavior - redirect to success page
+        setLocation("/payment-success");
+      }
       setIsProcessing(false);
     }, 2000);
   };
