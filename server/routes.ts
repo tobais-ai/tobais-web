@@ -495,20 +495,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Create payment intent for invoice payments
     app.post("/api/create-invoice-payment-intent", async (req, res, next) => {
       try {
+        console.log("Creating invoice payment intent with body:", req.body);
+        
         if (!req.isAuthenticated()) {
+          console.log("Authentication required for payment intent");
           return res.status(401).json({ message: "Authentication required" });
         }
         
         const { amount, invoiceIds } = req.body;
+        console.log("Payment intent parameters:", { amount, invoiceIds });
         
         if (!amount || amount <= 0) {
+          console.log("Invalid amount:", amount);
           return res.status(400).json({ message: "Valid amount is required" });
         }
         
         if (!invoiceIds || !Array.isArray(invoiceIds) || invoiceIds.length === 0) {
+          console.log("Invalid invoice IDs:", invoiceIds);
           return res.status(400).json({ message: "Valid invoice IDs are required" });
         }
         
+        if (!stripe) {
+          console.log("Stripe is not configured properly");
+          return res.status(500).json({ 
+            message: "Stripe payment processing is not available",
+            error: "STRIPE_NOT_CONFIGURED"
+          });
+        }
+        
+        console.log("Creating Stripe payment intent for amount:", Math.round(amount * 100));
         const paymentIntent = await stripe.paymentIntents.create({
           amount: Math.round(amount * 100), // Convert to cents
           currency: "usd",
@@ -519,9 +534,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         });
         
-        res.json({ clientSecret: paymentIntent.client_secret });
+        console.log("Payment intent created successfully:", { 
+          id: paymentIntent.id,
+          hasClientSecret: !!paymentIntent.client_secret,
+          secretLength: paymentIntent.client_secret ? paymentIntent.client_secret.length : 0
+        });
+        
+        res.json({ 
+          clientSecret: paymentIntent.client_secret,
+          paymentIntentId: paymentIntent.id
+        });
       } catch (error: any) {
-        res.status(500).json({ message: "Error creating payment intent: " + error.message });
+        console.error("Error creating invoice payment intent:", error);
+        
+        // Detailed error logging to help with debugging
+        if (error.type && error.message) {
+          console.error(`Stripe error (${error.type}): ${error.message}`);
+        }
+        
+        // Return user-friendly error response
+        res.status(500).json({ 
+          message: "Error creating payment intent: " + error.message,
+          errorType: error.type || "unknown_error",
+          code: error.code || "server_error"
+        });
       }
     });
   }

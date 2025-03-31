@@ -14,14 +14,24 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 
 // Initialize Stripe with the public key if available
-const hasStripeKey = !!import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const hasStripeKey = !!stripePublicKey;
+
+console.log('Stripe config check:', { 
+  hasKey: hasStripeKey,
+  keyFirstChars: hasStripeKey ? stripePublicKey.substring(0, 7) + '...' : 'N/A',
+  keyLength: hasStripeKey ? stripePublicKey.length : 0,
+  importMetaEnvKeys: Object.keys(import.meta.env)
+    .filter(key => key.includes('STRIPE') || key.includes('PUBLIC'))
+});
+
 if (!hasStripeKey) {
   console.error('Missing Stripe public key. Payments will not work correctly.');
 }
 
 // Safely attempt to load Stripe only if the key is available
 const stripePromise = hasStripeKey 
-  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) 
+  ? loadStripe(stripePublicKey) 
   : Promise.resolve(null);
 
 export default function CheckoutPage() {
@@ -84,6 +94,8 @@ export default function CheckoutPage() {
       
       if (checkoutType === 'invoice') {
         // Create real payment intent for invoices
+        console.log('Creating payment intent for invoices:', { invoiceIds, amount });
+        
         fetch('/api/create-invoice-payment-intent', {
           method: 'POST',
           headers: {
@@ -95,23 +107,36 @@ export default function CheckoutPage() {
           }),
         })
           .then(res => {
+            console.log('Payment intent response status:', res.status);
             if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
             }
             return res.json();
           })
           .then(data => {
+            console.log('Payment intent response data:', data);
             if (data.clientSecret) {
+              console.log('Client secret received, length:', data.clientSecret.length);
               setClientSecret(data.clientSecret);
             } else {
               console.error('No client secret returned from payment intent API');
             }
           })
           .catch(err => {
-            console.error('Error creating payment intent:', err);
+            console.error('Error creating payment intent for invoices:', err);
+            
+            // Convert error to JSON for better logging
+            try {
+              const errorJson = JSON.stringify(err, Object.getOwnPropertyNames(err));
+              console.error('Invoice error details:', errorJson);
+            } catch (jsonErr) {
+              console.error('Could not stringify invoice error:', jsonErr);
+            }
           });
       } else if (service) {
         // Create real payment intent for service purchase
+        console.log('Creating payment intent for service:', { serviceId: service.id, amount: service.price });
+        
         fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -123,20 +148,31 @@ export default function CheckoutPage() {
           }),
         })
           .then(res => {
+            console.log('Service payment intent response status:', res.status);
             if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
             }
             return res.json();
           })
           .then(data => {
+            console.log('Service payment intent response data:', data);
             if (data.clientSecret) {
+              console.log('Service client secret received, length:', data.clientSecret.length);
               setClientSecret(data.clientSecret);
             } else {
-              console.error('No client secret returned from payment intent API');
+              console.error('No client secret returned from payment intent API for service');
             }
           })
           .catch(err => {
-            console.error('Error creating payment intent:', err);
+            console.error('Error creating payment intent for service:', err);
+            
+            // Convert error to JSON for better logging
+            try {
+              const errorJson = JSON.stringify(err, Object.getOwnPropertyNames(err));
+              console.error('Service error details:', errorJson);
+            } catch (jsonErr) {
+              console.error('Could not stringify service error:', jsonErr);
+            }
           });
       }
     }
