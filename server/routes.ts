@@ -541,13 +541,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      const { amount } = req.body;
+      const { amount, isTestPayment } = req.body;
       
       if (!amount || amount <= 0) {
         return res.status(400).json({ message: "Valid amount is required" });
       }
       
+      console.log(`Creating PayPal order for $${amount} (Test payment: ${isTestPayment ? 'Yes' : 'No'})`);
+      
       const order = await createPayPalOrder(amount);
+      console.log("PayPal order created successfully:", order.id);
       res.json(order);
     } catch (error: any) {
       console.error("PayPal API error:", error);
@@ -573,10 +576,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Order ID is required" });
       }
       
+      console.log(`Capturing PayPal order: ${orderId}`);
       const captureData = await capturePayPalOrder(orderId);
+      console.log("PayPal order captured successfully:", captureData.id);
       res.json(captureData);
     } catch (error: any) {
-      res.status(500).json({ message: "Error capturing PayPal order: " + error.message });
+      console.error("Error capturing PayPal order:", error);
+      
+      // Mejorar el mensaje de error para facilitar la depuración
+      let statusCode = 500;
+      let errorMessage = "Error capturing PayPal order: " + error.message;
+      
+      if (error.statusCode === 401) {
+        statusCode = 401;
+        errorMessage = "PayPal authentication failed. Please check your credentials.";
+      }
+      
+      res.status(statusCode).json({ message: errorMessage });
     }
   });
 

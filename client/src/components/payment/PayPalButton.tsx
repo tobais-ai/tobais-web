@@ -91,7 +91,8 @@ export function PayPalButton({ amount, onSuccess, onError, isTestPayment = false
       
       <PayPalScriptProvider options={{ 
         clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID as string,
-        currency: "USD" 
+        currency: "USD",
+        intent: "capture"
       }}>
         <PayPalButtons
           style={{ 
@@ -104,6 +105,7 @@ export function PayPalButton({ amount, onSuccess, onError, isTestPayment = false
           createOrder={createOrder}
           onApprove={onApprove}
           onError={(err: any) => {
+            console.error("Error processing PayPal payment:", err);
             const errorMessage = typeof err === 'object' && err.message ? err.message : 'Error processing payment';
             toast({
               title: t('checkout.paymentFailed'),
@@ -111,6 +113,13 @@ export function PayPalButton({ amount, onSuccess, onError, isTestPayment = false
               variant: 'destructive'
             });
             if (onError) onError(err);
+          }}
+          onCancel={() => {
+            toast({
+              title: t('checkout.paymentCancelled'),
+              description: t('checkout.paymentCancelledDescription'),
+              variant: 'destructive'
+            });
           }}
         />
       </PayPalScriptProvider>
